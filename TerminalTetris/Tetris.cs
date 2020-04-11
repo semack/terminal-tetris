@@ -17,7 +17,7 @@ namespace TerminalTetris
             // checking screen size
             var screenSize = await Display.GetWidthHeightAsync();
             if (screenSize.Width != Constants.SceenWidth || screenSize.Height != Constants.ScreenHeight)
-                throw new ArgumentException($"The game has been designed for screen {Constants.SceenWidth} x {Constants.ScreenHeight} symbols. Please ajust terminal window size.");
+                throw new ArgumentException($"The game has been designed for screen {Constants.SceenWidth} x {Constants.ScreenHeight} symbols. Please adjust terminal window size.");
 
             await Display.OutAsync("Hello world");
             await base.RunAsync();
