@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using TerminalTetris.IO;
 
@@ -13,7 +14,8 @@ namespace TerminalTetris
 
             // run the game
             var tetris = new Tetris(new TerminalDisplay(), new TerminalKeyboard());
-            await tetris.RunAsync();
+            var cancellationTokenSource = new CancellationTokenSource();
+            await tetris.RunAsync(cancellationTokenSource.Token);
         }
 
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)

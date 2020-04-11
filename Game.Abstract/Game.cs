@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using GameFramework.Components;
 using GameFramework.EventArgs;
@@ -16,12 +17,12 @@ namespace GameFramework
 
         public TimeSpan TargetElapsedTime {get; set;}
 
-        public virtual async Task RunAsync()
+        public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
             await Task.CompletedTask;
         }
 
-        public virtual async Task ExitAsync()
+        public virtual async Task ExitAsync(CancellationToken cancellationToken = default)
         {
             await Task.CompletedTask;
         }
