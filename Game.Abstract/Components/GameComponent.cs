@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using GameFramework.EventArgs;
 using GameFramework.IO;
@@ -8,9 +7,65 @@ namespace GameFramework.Components
 {
     public abstract class GameComponent
     {
-        public bool IsEnabled { get; set; }
+        private bool _enabled;
+        private int _updateOrder;
 
-        public virtual async Task UpdateAsync(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        public bool Enabled
+        {
+            get
+            {
+                return _enabled;
+            }
+            set
+            {
+                if (value != _enabled)
+                {
+                    _enabled = value;
+                    Task.Run(async () =>
+                    {
+                        await EnabledChangedAsync(this, new System.EventArgs());
+                    }).Start();
+                }
+            }
+        }
+
+        public virtual int UpdateOrder
+        {
+            get
+            {
+                return _updateOrder;
+            }
+            set
+            {
+                if (value != _updateOrder)
+                {
+                    _updateOrder = value;
+                    Task.Run(async () =>
+                    {
+                        await UpdateOrderChangedAsync(this, new System.EventArgs());
+                    }).Start();
+                }
+            }
+        }
+
+        public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
+        }
+
+        public virtual async Task EnabledChangedAsync(object sender, System.EventArgs eventArgs, CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
+        }
+
+
+        public virtual async Task UpdateOrderChangedAsync(object sender, System.EventArgs eventArgs, CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
+        }
+
+
+        public virtual async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken = default)
         {
             await Task.CompletedTask;
         }
@@ -22,7 +77,7 @@ namespace GameFramework.Components
         public GameComponent(Game game, bool enabled = false)
         {
             Game = game;
-            IsEnabled = enabled;
+            _enabled = enabled;
         }
     }
 }

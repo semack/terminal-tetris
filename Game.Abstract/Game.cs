@@ -9,7 +9,7 @@ namespace GameFramework
 {
     public abstract class Game
     {
-        public event Func<GameUpdateEventArgs,CancellationToken, Task> OnUpdate;
+        public event Func<object, GameUpdateEventArgs,CancellationToken, Task> OnUpdate;
 
         public GameComponentsCollection Components { get; }
         public Display Display { get; }
@@ -24,10 +24,20 @@ namespace GameFramework
                 if (OnUpdate != null)
                 {
                     var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
-                    await OnUpdate.Invoke(args, cancellationToken);
+                    await OnUpdate.Invoke(this, args, cancellationToken);
                 }
                 await Task.Delay(5, cancellationToken);
             }
+        }
+
+        public virtual async Task TickAsync(CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
+        }
+
+        public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
         }
 
         public Game(Display display, Keyboard keyboard, TimeSpan targetElapsedTime)
@@ -39,7 +49,7 @@ namespace GameFramework
             OnUpdate += UpdateAsync;
         }
 
-        protected virtual async Task UpdateAsync(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        protected virtual async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
         }

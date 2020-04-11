@@ -11,12 +11,12 @@ namespace GameFramework.Components
         private Game _game;
         private List<GameComponent> _list;
 
-        private async Task UpdateAsync(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        private async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken)
         {
             _list.ForEach(async x =>
             {
-                if (x.IsEnabled)
-                    await x.UpdateAsync(args, cancellationToken);
+                if (x.Enabled)
+                    await x.UpdateAsync(sender, args, cancellationToken);
             });
             await Task.CompletedTask;
         }

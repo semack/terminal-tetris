@@ -7,18 +7,23 @@ using GameFramework.EventArgs;
 
 namespace TerminalTetris.Components
 {
-    public class SplashScreen : GameComponent
+    public class SplashScreen : DrawableGameComponent
     {
         public SplashScreen(Game game, bool enabled) : base(game, enabled)
         {
         }
 
-        public override async Task UpdateAsync(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        public override Task DrawAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken = default)
         {
             var key = (char)await Game.Keyboard.GetKeyAsync(cancellationToken);
             await Game.Display.OutAsync(key.ToString(), cancellationToken);
 
-            await base.UpdateAsync(args, cancellationToken);
+            await base.UpdateAsync(sender, args, cancellationToken);
         }
 
     }
