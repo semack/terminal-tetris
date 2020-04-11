@@ -9,23 +9,41 @@ namespace GameFramework
 {
     public abstract class Game
     {
-        public event Func<object, GameUpdateEventArgs,CancellationToken, Task> OnUpdate;
+        private bool _initialized;
 
-        public GameComponentsCollection Components { get; }
+        protected Game(Display display, Keyboard keyboard, TimeSpan targetElapsedTime)
+        {
+            Components = new GameComponentsCollection(this);
+            Display = display;
+            Keyboard = keyboard;
+            TargetElapsedTime = targetElapsedTime;
+            OnUpdate += UpdateAsync;
+        }
+
+        protected GameComponentsCollection Components { get; }
         public Display Display { get; }
         public Keyboard Keyboard { get; }
 
-        public TimeSpan TargetElapsedTime { get; private set; }
+        public TimeSpan TargetElapsedTime { get; }
+        public event Func<object, GameUpdateEventArgs, CancellationToken, Task> OnUpdate;
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
+            if (!_initialized)
+            {
+                await InitializeAsync(cancellationToken);
+                foreach (var item in Components) await item.InitializeAsync(cancellationToken);
+                _initialized = true;
+            }
+
             while (!cancellationToken.IsCancellationRequested)
-            {                
+            {
                 if (OnUpdate != null)
                 {
                     var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
                     await OnUpdate.Invoke(this, args, cancellationToken);
                 }
+
                 await Task.Delay(5, cancellationToken);
             }
         }
@@ -35,21 +53,13 @@ namespace GameFramework
             await Task.CompletedTask;
         }
 
-        public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
+        protected virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             await Task.CompletedTask;
         }
 
-        public Game(Display display, Keyboard keyboard, TimeSpan targetElapsedTime)
-        {
-            Components = new GameComponentsCollection(this);
-            Display = display;
-            Keyboard = keyboard;
-            TargetElapsedTime = targetElapsedTime;
-            OnUpdate += UpdateAsync;
-        }
-
-        protected virtual async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken)
+        protected virtual async Task UpdateAsync(object sender, GameUpdateEventArgs args,
+            CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
         }

@@ -13,18 +13,19 @@ namespace TerminalTetris.Components
         {
         }
 
-        public override Task DrawAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken = default)
+        public override Task DrawAsync(object sender, GameUpdateEventArgs args,
+            CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public override async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken = default)
+        public override async Task UpdateAsync(object sender, GameUpdateEventArgs args,
+            CancellationToken cancellationToken = default)
         {
-            var key = (char)await Game.Keyboard.GetKeyAsync(cancellationToken);
+            var key = (char) await Game.Keyboard.GetKeyAsync(cancellationToken);
             await Game.Display.OutAsync(key.ToString(), cancellationToken);
 
             await base.UpdateAsync(sender, args, cancellationToken);
         }
-
     }
 }

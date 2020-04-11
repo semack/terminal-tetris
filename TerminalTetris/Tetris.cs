@@ -17,16 +17,22 @@ namespace TerminalTetris
         {
         }
 
-        public override async Task RunAsync(CancellationToken cancellationToken = default)
+        protected override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            // checking screen size
             var screenSize = await Display.GetWidthHeightAsync(cancellationToken);
-            if (screenSize.Width != Constants.SceenWidth || screenSize.Height != Constants.ScreenHeight)
-                throw new ArgumentException($"The game has been designed for screen {Constants.SceenWidth} x {Constants.ScreenHeight} symbols. Please adjust terminal window size.");
+            if (screenSize.Width < Constants.ScreenWidth || screenSize.Height < Constants.ScreenHeight)
+                throw new ArgumentException(
+                    $"The game has been designed for screen {Constants.ScreenWidth} x {Constants.ScreenHeight} symbols. Please adjust terminal window size.");
 
             // Register components
             Components.Add(new SplashScreen(this, true));
 
+            await base.InitializeAsync(cancellationToken);
+        }
+
+        public override async Task RunAsync(CancellationToken cancellationToken = default)
+        {
+            // checking screen size                         
             await base.RunAsync(cancellationToken);
         }
 

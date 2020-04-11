@@ -39,7 +39,6 @@ namespace TerminalTetris.IO
             Terminal.Out(output);
 
             await Task.CompletedTask;
-
         }
     }
 }

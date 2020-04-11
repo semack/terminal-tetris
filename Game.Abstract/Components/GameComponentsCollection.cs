@@ -8,24 +8,12 @@ namespace GameFramework.Components
 {
     public class GameComponentsCollection : ICollection<GameComponent>
     {
-        private Game _game;
-        private List<GameComponent> _list;
-
-        private async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken)
-        {
-            _list.ForEach(async x =>
-            {
-                if (x.Enabled)
-                    await x.UpdateAsync(sender, args, cancellationToken);
-            });
-            await Task.CompletedTask;
-        }
+        private readonly List<GameComponent> _list;
 
         public GameComponentsCollection(Game game)
         {
-            _game = game;
             _list = new List<GameComponent>();
-            _game.OnUpdate += UpdateAsync;
+            game.OnUpdate += UpdateAsync;
         }
 
         public int Count => _list.Count;
@@ -65,6 +53,16 @@ namespace GameFramework.Components
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _list.GetEnumerator();
+        }
+
+        private async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken)
+        {
+            _list.ForEach(async x =>
+            {
+                if (x.Enabled)
+                    await x.UpdateAsync(sender, args, cancellationToken);
+            });
+            await Task.CompletedTask;
         }
     }
 }
