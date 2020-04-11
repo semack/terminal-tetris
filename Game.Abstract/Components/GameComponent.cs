@@ -8,18 +8,21 @@ namespace GameFramework.Components
 {
     public abstract class GameComponent
     {
-        public virtual async Task Update(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        public bool IsEnabled { get; set; }
+
+        public virtual async Task UpdateAsync(GameUpdateEventArgs args, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
         }
 
         public Game Game { get; }
 
-        public Keyboard Keyboard => Game?.Keyboard;
+        public Keyboard Keyboard => Game.Keyboard;
 
-        public GameComponent(Game game)
+        public GameComponent(Game game, bool enabled = false)
         {
             Game = game;
+            IsEnabled = enabled;
         }
     }
 }

@@ -11,9 +11,9 @@
   <ItemGroup>
     <Folder Include="IO\" />
     <Folder Include="Definitions\" />
+    <Folder Include="Components\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Terminal" Version="0.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
   </ItemGroup>
 </Project>

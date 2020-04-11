@@ -26,7 +26,7 @@ namespace GameFramework
                     var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
                     await OnUpdate.Invoke(args, cancellationToken);
                 }
-                await Task.Delay(10, cancellationToken);
+                await Task.Delay(5, cancellationToken);
             }
         }
 
@@ -36,10 +36,10 @@ namespace GameFramework
             Display = display;
             Keyboard = keyboard;
             TargetElapsedTime = targetElapsedTime;
-            OnUpdate += Update;
+            OnUpdate += UpdateAsync;
         }
 
-        public virtual async Task Update(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        protected virtual async Task UpdateAsync(GameUpdateEventArgs args, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
         }

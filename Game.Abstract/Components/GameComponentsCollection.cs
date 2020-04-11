@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using GameFramework.EventArgs;
 
 namespace GameFramework.Components
 {
@@ -8,10 +11,21 @@ namespace GameFramework.Components
         private Game _game;
         private List<GameComponent> _list;
 
+        private async Task UpdateAsync(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        {
+            _list.ForEach(async x =>
+            {
+                if (x.IsEnabled)
+                    await x.UpdateAsync(args, cancellationToken);
+            });
+            await Task.CompletedTask;
+        }
+
         public GameComponentsCollection(Game game)
         {
             _game = game;
             _list = new List<GameComponent>();
+            _game.OnUpdate += UpdateAsync;
         }
 
         public int Count => _list.Count;
@@ -21,12 +35,10 @@ namespace GameFramework.Components
         public void Add(GameComponent item)
         {
             _list.Add(item);
-            _game.OnUpdate += item.Update;
         }
 
         public void Clear()
         {
-            _list.ForEach(x => _game.OnUpdate -= x.Update);
             _list.Clear();
         }
 
@@ -47,7 +59,6 @@ namespace GameFramework.Components
 
         public bool Remove(GameComponent item)
         {
-            _game.OnUpdate -= item.Update;
             return _list.Remove(item);
         }
 

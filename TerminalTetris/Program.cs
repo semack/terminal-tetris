@@ -9,19 +9,15 @@ namespace TerminalTetris
     {
         static async Task Main(string[] args)
         {
-            // init global exception handler 
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+            // initializaton
+            var cancellationTokenSource = new CancellationTokenSource();
+            var tetris = new Tetris(new TerminalDisplay(), new TerminalKeyboard(), new TimeSpan(100));
+
+            // define global exception handler using terminal output      
+            AppDomain.CurrentDomain.UnhandledException += tetris.UnhandledExceptionTrapper;            
 
             // run the game
-            var tetris = new Tetris(new TerminalDisplay(), new TerminalKeyboard(), new TimeSpan(100));
-            var cancellationTokenSource = new CancellationTokenSource();
             await tetris.RunAsync(cancellationTokenSource.Token);
-        }
-
-        private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
-        {
-            Terminal.OutLine(e.ExceptionObject.ToString());
-            Environment.Exit(1);
         }
     }
 }

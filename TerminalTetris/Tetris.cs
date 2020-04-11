@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
+using TerminalTetris.Components;
 using TerminalTetris.Definitions;
 using TerminalTetris.IO;
 
@@ -25,7 +26,17 @@ namespace TerminalTetris
 
             await Display.OutAsync("Hello world", cancellationToken);
 
+            // Register components
+            Components.Add(new SplashScreen(this, true));
+
             await base.RunAsync(cancellationToken);
+        }
+
+        public void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Display.ClearAsync().Wait();
+            Display.OutAsync(e.ExceptionObject.ToString()).Wait();
+            Environment.Exit(1);
         }
     }
 }

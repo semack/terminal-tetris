@@ -26,14 +26,14 @@ namespace TerminalTetris.IO
             return Task.FromResult(output);
         }
 
-        public override async Task OutAsync(string? output, CancellationToken cancellationToken = default)
+        public override async Task OutAsync(string output, CancellationToken cancellationToken = default)
         {
             Terminal.Out(output);
 
             await Task.CompletedTask;
         }
 
-        public override async Task OutAsync(int x, int y, string? output, CancellationToken cancellationToken = default)
+        public override async Task OutAsync(int x, int y, string output, CancellationToken cancellationToken = default)
         {
             Terminal.MoveCursorTo(x, y);
             Terminal.Out(output);
