@@ -2,7 +2,7 @@
 
 namespace GameFramework.Components
 {
-    public class GameComponentCollection : Collection<GameComponent>
+    public class GameComponentsCollection : Collection<GameComponent>
     {
     }
 }

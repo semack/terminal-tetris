@@ -10,7 +10,7 @@ namespace GameFramework
     {
         public Func<Task, GameUpdateEventArgs> OnUpdate;
 
-        public GameComponentCollection Components { get; }
+        public GameComponentsCollection Components { get; }
         public Display Display { get; }
         public Keyboard Keyboard { get; }
 
@@ -28,7 +28,7 @@ namespace GameFramework
 
         public Game(Display display, Keyboard keyboard)
         {
-            Components = new GameComponentCollection();
+            Components = new GameComponentsCollection();
             Display = display;
             Keyboard = keyboard;
         }
