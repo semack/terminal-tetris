@@ -6,24 +6,39 @@ namespace TerminalTetris.IO
 {
     public class TerminalDisplay : Display
     {
-        public override Task ClearAsync()
+        public TerminalDisplay()
         {
-            throw new NotImplementedException();
+            Terminal.Screen.IsCursorVisible = false;
         }
 
-        public override Task<(int, int)> GetDimensionXYAsync()
+        public override async Task ClearAsync()
         {
-            throw new NotImplementedException();
+            Terminal.ClearScreen();
+
+            await Task.CompletedTask;
         }
 
-        public override Task OutAsync(string line)
+        public override Task<(int, int)> GetDimensionsXYAsync()
         {
-            throw new NotImplementedException();
+            var output = (width: Terminal.Size.Width, height: Terminal.Size.Height);
+
+            return Task.FromResult(output);
         }
 
-        public override Task OutAsync(int X, int Y, string line)
+        public override async Task OutAsync(string line)
         {
-            throw new NotImplementedException();
+            Terminal.Out(line);
+
+            await Task.CompletedTask;
+        }
+
+        public override async Task OutAsync(int x, int y, string line)
+        {
+            Terminal.MoveCursorTo(x, y);
+            Terminal.Out(line);
+
+            await Task.CompletedTask;
+
         }
     }
 }

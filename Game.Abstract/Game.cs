@@ -11,17 +11,17 @@ namespace GameFramework
         public Func<Task, GameUpdateEventArgs> OnUpdate;
 
         public GameComponentCollection Components { get; }
-
+        public Display Display { get; }
         public Keyboard Keyboard { get; }
 
         public TimeSpan TargetElapsedTime {get; set;}
 
-        public async Task RunAsync()
+        public virtual async Task RunAsync()
         {
             await Task.CompletedTask;
         }
 
-        public async Task ExitAsync()
+        public virtual async Task ExitAsync()
         {
             await Task.CompletedTask;
         }
@@ -29,6 +29,7 @@ namespace GameFramework
         public Game(Display display, Keyboard keyboard)
         {
             Components = new GameComponentCollection();
+            Display = display;
             Keyboard = keyboard;
         }
     }
