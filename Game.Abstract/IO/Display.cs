@@ -6,7 +6,7 @@ namespace GameFramework.IO
     {
         public abstract Task ClearAsync();
         public abstract Task OutAsync(string line);
-        public abstract Task OutAsync(int X, int Y, string line);
-        public abstract Task<(int, int)> GetDimensionsXYAsync();
+        public abstract Task OutAsync(int x, int y, string line);
+        public abstract Task<(int Width, int Height)> GetWidthHeightAsync();
     }
 }

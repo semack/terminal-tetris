@@ -10,6 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IO\" />
+    <Folder Include="Definitions\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Terminal" Version="0.2.0" />

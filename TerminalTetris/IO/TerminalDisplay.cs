@@ -18,9 +18,9 @@ namespace TerminalTetris.IO
             await Task.CompletedTask;
         }
 
-        public override Task<(int, int)> GetDimensionsXYAsync()
+        public override Task<(int Width, int Height)> GetWidthHeightAsync()
         {
-            var output = (width: Terminal.Size.Width, height: Terminal.Size.Height);
+            var output = (Terminal.Size.Width, Terminal.Size.Height);
 
             return Task.FromResult(output);
         }
