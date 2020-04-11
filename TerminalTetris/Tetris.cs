@@ -9,7 +9,10 @@ namespace TerminalTetris
 {
     public class Tetris : Game
     {
-        public Tetris(TerminalDisplay display, TerminalKeyboard keyboard) : base(display, keyboard)
+        public Tetris(TerminalDisplay display,
+            TerminalKeyboard keyboard,
+            TimeSpan targetElapsedTime)
+            : base(display, keyboard, targetElapsedTime)
         {
         }
 
@@ -23,16 +26,6 @@ namespace TerminalTetris
             await Display.OutAsync("Hello world", cancellationToken);
 
             await base.RunAsync(cancellationToken);
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                var z = Keyboard.GetKeyAsync(cancellationToken);
-
-                if (z != null)
-                    await Display.OutAsync(z.ToString(), cancellationToken);
-            
-                await Task.Delay(10);
-            }
         }
     }
 }

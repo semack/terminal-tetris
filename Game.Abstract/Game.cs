@@ -9,29 +9,39 @@ namespace GameFramework
 {
     public abstract class Game
     {
-        public Func<Task, GameUpdateEventArgs> OnUpdate;
+        public event Func<GameUpdateEventArgs,CancellationToken, Task> OnUpdate;
 
         public GameComponentsCollection Components { get; }
         public Display Display { get; }
         public Keyboard Keyboard { get; }
 
-        public TimeSpan TargetElapsedTime {get; set;}
+        public TimeSpan TargetElapsedTime { get; private set; }
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
-            await Task.CompletedTask;
+            while (!cancellationToken.IsCancellationRequested)
+            {                
+                if (OnUpdate != null)
+                {
+                    var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
+                    await OnUpdate.Invoke(args, cancellationToken);
+                }
+                await Task.Delay(10, cancellationToken);
+            }
         }
 
-        public virtual async Task ExitAsync(CancellationToken cancellationToken = default)
+        public Game(Display display, Keyboard keyboard, TimeSpan targetElapsedTime)
         {
-            await Task.CompletedTask;
-        }
-
-        public Game(Display display, Keyboard keyboard)
-        {
-            Components = new GameComponentsCollection();
+            Components = new GameComponentsCollection(this);
             Display = display;
             Keyboard = keyboard;
+            TargetElapsedTime = targetElapsedTime;
+            OnUpdate += Update;
+        }
+
+        public virtual async Task Update(GameUpdateEventArgs args, CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
         }
     }
 }

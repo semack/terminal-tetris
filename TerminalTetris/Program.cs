@@ -13,7 +13,7 @@ namespace TerminalTetris
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 
             // run the game
-            var tetris = new Tetris(new TerminalDisplay(), new TerminalKeyboard());
+            var tetris = new Tetris(new TerminalDisplay(), new TerminalKeyboard(), new TimeSpan(100));
             var cancellationTokenSource = new CancellationTokenSource();
             await tetris.RunAsync(cancellationTokenSource.Token);
         }
