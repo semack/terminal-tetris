@@ -22,9 +22,11 @@ namespace TerminalTetris.Components
         public override async Task UpdateAsync(object sender, GameUpdateEventArgs args,
             CancellationToken cancellationToken = default)
         {
-            var key = (char) await Game.Keyboard.GetKeyAsync(cancellationToken);
-            await Game.Display.OutAsync(key.ToString(), cancellationToken);
-
+            var key = await Game.Keyboard.GetKeyAsync(cancellationToken);
+            if (key != null)
+            {
+                await Game.Display.OutAsync(((char)key).ToString(), cancellationToken);
+            }
             await base.UpdateAsync(sender, args, cancellationToken);
         }
     }

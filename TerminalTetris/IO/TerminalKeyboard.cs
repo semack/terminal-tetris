@@ -16,6 +16,9 @@ namespace TerminalTetris.IO
         {
             var key = Terminal.ReadRaw();
 
+            if (key == 3) // Ctrl + C
+                Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
+
             return await Task.FromResult(key);
         }
     }

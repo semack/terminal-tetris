@@ -27,6 +27,20 @@ namespace GameFramework
         public TimeSpan TargetElapsedTime { get; }
         public event Func<object, GameUpdateEventArgs, CancellationToken, Task> OnUpdate;
 
+        private void GameLoop(object obj)
+        {
+            var cancellationToken = (CancellationToken) obj;
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    if (OnUpdate != null)
+                    {
+                        var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
+                        OnUpdate.Invoke(this, args, cancellationToken).Wait(cancellationToken);
+                    }
+                    Thread.Sleep(50);
+                }
+        }
+
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
             if (!_initialized)
@@ -35,17 +49,7 @@ namespace GameFramework
                 foreach (var item in Components) await item.InitializeAsync(cancellationToken);
                 _initialized = true;
             }
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                if (OnUpdate != null)
-                {
-                    var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
-                    await OnUpdate.Invoke(this, args, cancellationToken);
-                }
-
-                await Task.Delay(5, cancellationToken);
-            }
+            ThreadPool.QueueUserWorkItem(GameLoop, cancellationToken);
         }
 
         public virtual async Task TickAsync(CancellationToken cancellationToken = default)

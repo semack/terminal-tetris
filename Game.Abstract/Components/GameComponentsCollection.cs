@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameFramework.EventArgs;
@@ -57,11 +58,14 @@ namespace GameFramework.Components
 
         private async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken)
         {
-            _list.ForEach(async x =>
+            foreach (var item in _list.Where(x=>x.Enabled).OrderBy(x=>x.UpdateOrder))
             {
-                if (x.Enabled)
-                    await x.UpdateAsync(sender, args, cancellationToken);
-            });
+                 await item.UpdateAsync(sender, args, cancellationToken);
+                
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+            }
+
             await Task.CompletedTask;
         }
     }
