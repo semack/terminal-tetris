@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using GameFramework.EventArgs;
 using GameFramework.IO;
@@ -10,10 +11,9 @@ namespace GameFramework.Components
         private bool _enabled;
         private int _updateOrder;
 
-        protected GameComponent(Game game, bool enabled = false)
+        protected GameComponent(Game game)
         {
-            Game = game;
-            _enabled = enabled;
+            Game = game ?? throw new ArgumentException(nameof(game));
         }
 
         public bool Enabled

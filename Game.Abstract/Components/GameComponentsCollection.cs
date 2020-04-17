@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,6 +14,9 @@ namespace GameFramework.Components
 
         public GameComponentsCollection(Game game)
         {
+            if (game == null) 
+                throw new ArgumentException(nameof(game));
+            
             _list = new List<GameComponent>();
             game.OnUpdate += UpdateAsync;
         }

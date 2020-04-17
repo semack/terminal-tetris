@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using GameFramework.EventArgs;
+using GameFramework.IO;
 
 namespace GameFramework.Components
 {
@@ -9,9 +10,10 @@ namespace GameFramework.Components
         private int _drawOrder;
         private bool _visible;
 
-        protected DrawableGameComponent(Game game, bool enabled = false) : base(game, enabled)
+        protected Display Display => Game.Display;
+
+        protected DrawableGameComponent(Game game) : base(game)
         {
-            _visible = false;
         }
 
         public bool Visible
