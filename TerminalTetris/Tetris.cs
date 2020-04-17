@@ -1,30 +1,20 @@
 ﻿using System;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.IO;
-using TerminalTetris.Components;
 using TerminalTetris.Definitions;
-using TerminalTetris.IO;
+using TerminalTetris.Screens;
 
 namespace TerminalTetris
 {
     public class Tetris : Game
     {
-
-        public SplashScreen SplashScreen;
-        public GameScreen GameScreen;
-        public ScoresScreen ScoreScreen;
-        
         public Tetris(Display display,
             Keyboard keyboard,
             TimeSpan targetElapsedTime)
             : base(display, keyboard, targetElapsedTime)
         {
-            SplashScreen = new SplashScreen(this);
-            GameScreen = new GameScreen(this);
-            ScoreScreen = new ScoresScreen(this);
         }
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -33,22 +23,22 @@ namespace TerminalTetris
             if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
                 throw new ArgumentException(
                     $"The game has been designed for screen {Constants.ScreenWidth} x {Constants.ScreenHeight} symbols. Please adjust terminal window size.");
-
-            // Register components
-            Components.Add(SplashScreen);
-            Components.Add(GameScreen);
-            Components.Add(ScoreScreen);
         }
 
         public override async Task RunAsync(CancellationToken cancellationToken = default)
         {
+            var splash = new SplashScreen(this);
+            var main = new MainScreen(this);
+            var score = new ScoresScreen(this);
+
             await base.RunAsync(cancellationToken);
+
             var isGameFinished = false;
             while (!isGameFinished)
             {
-                var userLevel = await SplashScreen.GetUserLevelAsync(cancellationToken);
-                var scores = await  GameScreen.PlayGameAsync(userLevel, cancellationToken);
-                isGameFinished = await ScoreScreen.ShowLetterBoardAsync(scores, cancellationToken);
+                var userLevel = await splash.GetUserLevelAsync(cancellationToken);
+                var scores = await main.PlayGameAsync(userLevel, cancellationToken);
+                isGameFinished = await score.ShowLetterBoardAsync(scores, cancellationToken);
             }
         }
     }

@@ -10,11 +10,11 @@ namespace GameFramework.Components
         private int _drawOrder;
         private bool _visible;
 
-        protected Display Display => Game.Display;
-
         protected DrawableGameComponent(Game game) : base(game)
         {
         }
+
+        protected Display Display => Game.Display;
 
         public bool Visible
         {

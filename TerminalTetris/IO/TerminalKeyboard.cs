@@ -7,19 +7,31 @@ namespace TerminalTetris.IO
 {
     public class TerminalKeyboard : Keyboard
     {
-        public TerminalKeyboard()
-        {
-            Terminal.SetRawMode(true, true);
-        }
-
         public override async Task<byte?> GetKeyAsync(CancellationToken cancellationToken = default)
         {
+            if (!Terminal.IsRawMode)
+                Terminal.SetRawMode(true, true);
+
+            Terminal.IsCursorVisible = false;
+
             var key = Terminal.ReadRaw();
 
             if (key == 3) // Ctrl + C
                 Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
 
             return await Task.FromResult(key);
+        }
+
+        public override async Task<string> ReadLineAsync(CancellationToken cancellationToken = default)
+        {
+            if (Terminal.IsRawMode)
+                Terminal.SetRawMode(false, false);
+
+            Terminal.IsCursorVisible = true;
+
+            var result = Terminal.ReadLine();
+
+            return await Task.FromResult(result);
         }
     }
 }

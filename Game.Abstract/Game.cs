@@ -30,15 +30,16 @@ namespace GameFramework
         private void GameLoop(object obj)
         {
             var cancellationToken = (CancellationToken) obj;
-                while (!cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (OnUpdate != null)
                 {
-                    if (OnUpdate != null)
-                    {
-                        var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
-                        OnUpdate.Invoke(this, args, cancellationToken).Wait(cancellationToken);
-                    }
-                    Thread.Sleep(50);
+                    var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
+                    OnUpdate.Invoke(this, args, cancellationToken).Wait(cancellationToken);
                 }
+
+                Thread.Sleep(50);
+            }
         }
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
@@ -49,6 +50,7 @@ namespace GameFramework
                 foreach (var item in Components) await item.InitializeAsync(cancellationToken);
                 _initialized = true;
             }
+
             ThreadPool.QueueUserWorkItem(GameLoop, cancellationToken);
         }
 

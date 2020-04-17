@@ -11,21 +11,21 @@ namespace TerminalTetris
         private static async Task<int> Main(string[] args)
         {
             using var cancellationTokenSource = new CancellationTokenSource();
-            
-            var tetris = new Tetris(new TerminalDisplay(), 
-                new TerminalKeyboard(), 
+
+            var tetris = new Tetris(new TerminalDisplay(),
+                new TerminalKeyboard(),
                 new TimeSpan(100));
 
             await tetris.RunAsync(cancellationTokenSource.Token);
-            
+
             await TerminalHost
                 .CreateDefaultBuilder()
-                .RunTerminalAsync((options) =>
+                .RunTerminalAsync(options =>
                 {
                     options.Title = nameof(TerminalTetris);
                     options.SuppressStatusMessages = true;
-                },  cancellationTokenSource.Token);
-            
+                }, cancellationTokenSource.Token);
+
             return 0;
         }
     }

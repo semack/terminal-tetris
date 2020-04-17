@@ -14,9 +14,9 @@ namespace GameFramework.Components
 
         public GameComponentsCollection(Game game)
         {
-            if (game == null) 
+            if (game == null)
                 throw new ArgumentException(nameof(game));
-            
+
             _list = new List<GameComponent>();
             game.OnUpdate += UpdateAsync;
         }
@@ -62,10 +62,10 @@ namespace GameFramework.Components
 
         private async Task UpdateAsync(object sender, GameUpdateEventArgs args, CancellationToken cancellationToken)
         {
-            foreach (var item in _list.Where(x=>x.Enabled).OrderBy(x=>x.UpdateOrder))
+            foreach (var item in _list.Where(x => x.Enabled).OrderBy(x => x.UpdateOrder))
             {
-                 await item.UpdateAsync(sender, args, cancellationToken);
-                
+                await item.UpdateAsync(sender, args, cancellationToken);
+
                 if (cancellationToken.IsCancellationRequested)
                     break;
             }

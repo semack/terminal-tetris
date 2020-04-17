@@ -11,7 +11,7 @@
   <ItemGroup>
     <Folder Include="IO\" />
     <Folder Include="Definitions\" />
-    <Folder Include="Components\" />
+    <Folder Include="Screens\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.3" />
