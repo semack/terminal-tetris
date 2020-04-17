@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.Components;
@@ -27,7 +28,10 @@ namespace TerminalTetris.Screens
         private async Task DrawSplashAsync(CancellationToken cancellationToken = default)
         {
             await Display.ClearAsync(cancellationToken);
-            await Display.OutAsync(10, 18, Strings.YourLevel, cancellationToken);
+            await Display.OutAsync(34, 9, Strings.SplashSymbol, cancellationToken);
+            await Display.OutAsync(34, 10, Strings.SplashLogo, cancellationToken);
+            await Display.OutAsync(42, 11, Strings.SplashSymbol, cancellationToken);
+            await Display.OutAsync(18, 20, Strings.YourLevel, cancellationToken);
         }
 
         private async Task<int?> InputLevelAsync(CancellationToken cancellationToken = default)
