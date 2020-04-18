@@ -17,7 +17,7 @@ namespace TerminalTetris
         {
         }
 
-        protected override async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             var (width, height) = await Display.GetWidthHeightAsync(cancellationToken);
             if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)

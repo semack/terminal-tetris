@@ -6,10 +6,12 @@ using GameFramework.IO;
 
 namespace GameFramework.Components
 {
-    public abstract class GameComponent
+    public abstract class GameComponent : BaseGameComponent
     {
         private bool _enabled;
         private int _updateOrder;
+
+        public Game Game { get; }
 
         protected GameComponent(Game game)
         {
@@ -38,14 +40,6 @@ namespace GameFramework.Components
             }
         }
 
-        public Game Game { get; }
-
-        public Keyboard Keyboard => Game.Keyboard;
-
-        public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
-        {
-            await Task.CompletedTask;
-        }
 
         protected virtual async Task EnabledChangedAsync(object sender, System.EventArgs eventArgs,
             CancellationToken cancellationToken = default)
@@ -55,13 +49,6 @@ namespace GameFramework.Components
 
 
         protected virtual async Task UpdateOrderChangedAsync(object sender, System.EventArgs eventArgs,
-            CancellationToken cancellationToken = default)
-        {
-            await Task.CompletedTask;
-        }
-
-
-        public virtual async Task UpdateAsync(object sender, GameUpdateEventArgs args,
             CancellationToken cancellationToken = default)
         {
             await Task.CompletedTask;

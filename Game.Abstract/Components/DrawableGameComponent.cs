@@ -14,8 +14,6 @@ namespace GameFramework.Components
         {
         }
 
-        protected Display Display => Game.Display;
-
         public bool Visible
         {
             get => _visible;

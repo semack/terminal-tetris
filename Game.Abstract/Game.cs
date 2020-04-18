@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameFramework.Components;
@@ -7,31 +8,29 @@ using GameFramework.IO;
 
 namespace GameFramework
 {
-    public abstract class Game
+    public abstract class Game: BaseGameComponent
     {
         private bool _initialized;
 
         protected Game(Display display, Keyboard keyboard, TimeSpan targetElapsedTime)
         {
-            Components = new GameComponentsCollection(this);
             Display = display;
             Keyboard = keyboard;
             TargetElapsedTime = targetElapsedTime;
-            OnUpdate += UpdateAsync;
         }
 
-        protected GameComponentsCollection Components { get; }
+        public readonly  GameComponentsCollection Components = new GameComponentsCollection();
+
         public Display Display { get; }
         public Keyboard Keyboard { get; }
 
         public TimeSpan TargetElapsedTime { get; }
-        public event Func<object, GameUpdateEventArgs, CancellationToken, Task> OnUpdate;
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
             if (!_initialized)
             {
-                await InitializeAsync(cancellationToken);
+                await base.InitializeAsync(cancellationToken);
                 foreach (var item in Components) await item.InitializeAsync(cancellationToken);
                 _initialized = true;
             }
@@ -40,31 +39,28 @@ namespace GameFramework
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    if (OnUpdate != null)
-                    {
-                        var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
-                        await OnUpdate.Invoke(this, args, cancellationToken);
-                    }
-
+                    await TickAsync(cancellationToken);
                     await Task.Delay(50, cancellationToken);
                 }
             }, cancellationToken);
         }
 
-        public virtual async Task TickAsync(CancellationToken cancellationToken = default)
+        protected async Task TickAsync(CancellationToken cancellationToken = default)
         {
-            await Task.CompletedTask;
+            var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
+            await UpdateAsync(this, args, cancellationToken);
         }
 
-        protected virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public override async Task UpdateAsync(object sender, GameUpdateEventArgs args,
+            CancellationToken cancellationToken = default)
         {
-            await Task.CompletedTask;
-        }
+            foreach (var item in Components.Where(x => x.Enabled).OrderBy(x => x.UpdateOrder))
+            {
+                await item.UpdateAsync(sender, args, cancellationToken);
 
-        protected virtual async Task UpdateAsync(object sender, GameUpdateEventArgs args,
-            CancellationToken cancellationToken)
-        {
-            await Task.CompletedTask;
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+            }
         }
     }
 }
