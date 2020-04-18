@@ -46,7 +46,7 @@ namespace TerminalTetris.Screens
 
             //load data
             string jsonString;
-            var fileName = $"{nameof(TerminalTetris)}.json";
+            var fileName = $"{nameof(TerminalTetris)}.letterboard";
             if (File.Exists(fileName))
             {
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);
