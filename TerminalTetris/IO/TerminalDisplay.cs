@@ -7,15 +7,10 @@ namespace TerminalTetris.IO
 {
     public class TerminalDisplay : Display
     {
-        public TerminalDisplay()
-        {
-            Terminal.Screen.IsCursorVisible = false;
-        }
-
         public override async Task ClearAsync(CancellationToken cancellationToken = default)
         {
             Terminal.ClearScreen();
-
+            
             await Task.CompletedTask;
         }
 

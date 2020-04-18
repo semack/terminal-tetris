@@ -27,19 +27,24 @@ namespace TerminalTetris
 
         public override async Task RunAsync(CancellationToken cancellationToken = default)
         {
-            var splash = new SplashScreen(this);
-            var main = new MainScreen(this);
-            var score = new ScoresScreen(this);
-
-            await base.RunAsync(cancellationToken);
-
-            var isGameFinished = false;
-            while (!isGameFinished)
+            ThreadPool.QueueUserWorkItem(async state =>
             {
-                var userLevel = await splash.GetUserLevelAsync(cancellationToken);
-                var scores = await main.PlayGameAsync(userLevel, cancellationToken);
-                isGameFinished = await score.ShowLetterBoardAsync(scores, cancellationToken);
-            }
+                var splash = new SplashScreen(this);
+                var main = new MainScreen(this);
+                var score = new ScoresScreen(this);
+
+                await base.RunAsync(cancellationToken);
+
+                var isGameFinished = false;
+                while (!isGameFinished)
+                {
+                    var userLevel = await splash.GetUserLevelAsync(cancellationToken);
+                    var scores = await main.PlayGameAsync(userLevel, cancellationToken);
+                    isGameFinished = await score.ShowLetterBoardAsync(scores, cancellationToken);
+                }
+            }, cancellationToken);
+            
+            await base.RunAsync(cancellationToken);
         }
     }
 }

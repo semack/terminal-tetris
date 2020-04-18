@@ -11,7 +11,7 @@ namespace TerminalTetris
         private static async Task<int> Main(string[] args)
         {
             using var cancellationTokenSource = new CancellationTokenSource();
-
+            
             var tetris = new Tetris(new TerminalDisplay(),
                 new TerminalKeyboard(),
                 new TimeSpan(100));

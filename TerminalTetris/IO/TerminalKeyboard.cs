@@ -10,12 +10,15 @@ namespace TerminalTetris.IO
         public override async Task<byte?> GetKeyAsync(CancellationToken cancellationToken = default)
         {
             if (!Terminal.IsRawMode)
+            {
                 Terminal.SetRawMode(true, true);
 
-            Terminal.IsCursorVisible = false;
-
+                Terminal.IsCursorVisible = false;
+                Terminal.IsCursorBlinking = false;
+            }
+            
             var key = Terminal.ReadRaw();
-
+            
             if (key == 3) // Ctrl + C
                 Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
 
@@ -25,9 +28,12 @@ namespace TerminalTetris.IO
         public override async Task<string> ReadLineAsync(CancellationToken cancellationToken = default)
         {
             if (Terminal.IsRawMode)
+            {
                 Terminal.SetRawMode(false, false);
 
-            Terminal.IsCursorVisible = true;
+                Terminal.IsCursorVisible = true;
+                Terminal.IsCursorBlinking = true;
+            }
 
             var result = Terminal.ReadLine();
 
