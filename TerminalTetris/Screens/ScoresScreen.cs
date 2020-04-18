@@ -75,21 +75,21 @@ namespace TerminalTetris.Screens
         private async Task DrawAsync(CancellationToken cancellationToken = default)
         {
             await Display.ClearAsync(cancellationToken);
-            await Display.OutAsync(21, 2, Strings.Name, cancellationToken);
-            await Display.OutAsync(32, 2, Strings.Level, cancellationToken);
-            await Display.OutAsync(41, 2, Strings.Score, cancellationToken);
+            await Display.OutAsync(16, 1, Strings.Name, cancellationToken);
+            await Display.OutAsync(27, 1, Strings.Level, cancellationToken);
+            await Display.OutAsync(36, 1, Strings.Score, cancellationToken);
             var i = 1;
             foreach (var item in _letterBoard)
             {
-                await Display.OutAsync(21, 2 + i, item.Player, cancellationToken);
-                await Display.OutAsync(32, 2 + i, 7, item.Level.ToString(), cancellationToken);
-                await Display.OutAsync(41, 2 + i, 4, item.Score.ToString(), cancellationToken);
+                await Display.OutAsync(16, 1 + i, item.Player, cancellationToken);
+                await Display.OutAsync(27, 1 + i, 7, item.Level.ToString(), cancellationToken);
+                await Display.OutAsync(36, 1 + i, 4, item.Score.ToString(), cancellationToken);
                 if (item.IsCurrentPlayer)
-                    await Display.OutAsync(45, 2 + i, 3, Strings.CurrentPlayer, cancellationToken);
+                    await Display.OutAsync(40, 1+ i, 3, Strings.CurrentPlayer, cancellationToken);
                 i++;
             }
 
-            await Display.OutAsync(10, 24, Strings.PlayAgain, cancellationToken);
+            await Display.OutAsync(13, 23, Strings.PlayAgain, cancellationToken);
         }
 
         private async Task<bool?> PlayerInputAsync(CancellationToken cancellationToken = default)

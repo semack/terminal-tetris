@@ -27,10 +27,10 @@ namespace TerminalTetris.Screens
         private async Task DrawAsync(CancellationToken cancellationToken = default)
         {
             await Display.ClearAsync(cancellationToken);
-            await Display.OutAsync(34, 9, Strings.SplashSymbol, cancellationToken);
-            await Display.OutAsync(34, 10, Strings.SplashLogo, cancellationToken);
-            await Display.OutAsync(42, 11, Strings.SplashSymbol, cancellationToken);
-            await Display.OutAsync(18, 20, Strings.YourLevel, cancellationToken);
+            await Display.OutAsync(32, 6, Strings.SplashSymbol, cancellationToken);
+            await Display.OutAsync(33, 7, Strings.SplashLogo, cancellationToken);
+            await Display.OutAsync(41, 8, Strings.SplashSymbol, cancellationToken);
+            await Display.OutAsync(20, 20, Strings.YourLevel, cancellationToken);
         }
 
         private async Task<int?> InputLevelAsync(CancellationToken cancellationToken = default)
