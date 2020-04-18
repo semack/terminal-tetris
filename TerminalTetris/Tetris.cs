@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.IO;
-using TerminalTetris.Common;
 using TerminalTetris.Definitions;
 using TerminalTetris.Resources;
 using TerminalTetris.Screens;

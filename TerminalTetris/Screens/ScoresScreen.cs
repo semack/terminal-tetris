@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.Components;
 using TerminalTetris.Common;
+using TerminalTetris.Definitions;
 using TerminalTetris.Resources;
 
 namespace TerminalTetris.Screens
@@ -63,7 +64,7 @@ namespace TerminalTetris.Screens
             _letterBoard = _letterBoard
                 .OrderBy(x => x.Level)
                 .ThenBy(x => x.Score)
-                .Take(20)
+                .Take(Constants.MaxTopPlayers)
                 .ToList();
 
             // storing back to file

@@ -15,7 +15,14 @@ namespace TerminalTetris.Screens
 
         public async Task<PlayerScoreItem> PlayGameAsync(int userLevel, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var result = new PlayerScoreItem()
+            {
+                Player = "TEST",
+                Level = 7,
+                Score = 9876,
+                IsCurrentPlayer = true
+            };
+            return await Task.FromResult(result);
         }
     }
 }
