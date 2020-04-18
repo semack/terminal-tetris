@@ -43,9 +43,9 @@ namespace TerminalTetris
                     var playerLevel = await splashScreen.GetPlayerLevelAsync(cancellationToken);
                     var scores = new PlayerScoreItem()
                     {
-                        Player = @"СЕРГЕЙ ФРОЛОВ",
+                        Player = @"СЕРГЕ ФРОЛОВ",
                         Level = 5,
-                        Score = 1676,
+                        Score = 1678,
                         IsCurrentPlayer = true
                     };
                     // var scores = await main.PlayGameAsync(playerLevel, cancellationToken);
