@@ -30,7 +30,7 @@ namespace TerminalTetris.Screens
             await Display.OutAsync(33, 6, Strings.SplashSymbol, cancellationToken);
             await Display.OutAsync(33, 7, Strings.SplashLogo, cancellationToken);
             await Display.OutAsync(41, 8, Strings.SplashSymbol, cancellationToken);
-            await Display.OutAsync(20, 20, Strings.YourLevel, cancellationToken);
+            await Display.OutAsync(19, 20, Strings.YourLevel, cancellationToken);
         }
 
         private async Task<int?> InputLevelAsync(CancellationToken cancellationToken = default)
