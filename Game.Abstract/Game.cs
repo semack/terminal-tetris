@@ -36,17 +36,17 @@ namespace GameFramework
                 _initialized = true;
             }
 
-            ThreadPool.QueueUserWorkItem(state =>
+            ThreadPool.QueueUserWorkItem(async state =>
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     if (OnUpdate != null)
                     {
                         var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
-                        OnUpdate.Invoke(this, args, cancellationToken).Wait(cancellationToken);
+                        await OnUpdate.Invoke(this, args, cancellationToken);
                     }
 
-                    Thread.Sleep(50);
+                    await Task.Delay(50, cancellationToken);
                 }
             }, cancellationToken);
         }
