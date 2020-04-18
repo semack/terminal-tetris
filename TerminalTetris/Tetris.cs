@@ -23,7 +23,7 @@ namespace TerminalTetris
         {
             var (width, height) = await Display.GetWidthHeightAsync(cancellationToken);
             if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
-                throw new ArgumentException(string.Format(Strings.ScreenResolutionError, 
+                throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
                     Constants.ScreenWidth, Constants.ScreenHeight));
         }
 
@@ -41,16 +41,10 @@ namespace TerminalTetris
                 while (playAgain)
                 {
                     var playerLevel = await splashScreen.GetPlayerLevelAsync(cancellationToken);
-                    var scores = new PlayerScoreItem()
-                    {
-                        Player = @"СЕРГЕ ФРОЛОВ",
-                        Level = 5,
-                        Score = 1678,
-                        IsCurrentPlayer = true
-                    };
-                    // var scores = await main.PlayGameAsync(playerLevel, cancellationToken);
+                    var scores = await mainScreen.PlayGameAsync(playerLevel, cancellationToken);
                     playAgain = await scoresScreen.ShowLetterBoardAsync(scores, cancellationToken);
                 }
+
                 Terminal.GenerateBreakSignal(TerminalBreakSignal.Quit);
             }, cancellationToken);
             await base.RunAsync(cancellationToken);

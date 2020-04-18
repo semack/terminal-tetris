@@ -19,7 +19,7 @@ namespace TerminalTetris.IO
         {
             var xx = x;
             //if (width > output.Length)
-                xx = x + width - output.Length;
+            xx = x + width - output.Length;
             await OutAsync(xx, y, output, cancellationToken);
         }
 

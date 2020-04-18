@@ -7,8 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.Components;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using TerminalTetris.Common;
 using TerminalTetris.Resources;
 
@@ -17,6 +15,7 @@ namespace TerminalTetris.Screens
     public class ScoresScreen : Screen
     {
         private IList<PlayerScoreItem> _letterBoard;
+
         public ScoresScreen(Game game) : base(game)
         {
             _letterBoard = new List<PlayerScoreItem>();
@@ -37,14 +36,13 @@ namespace TerminalTetris.Screens
 
         private async Task LoadScoresAsync(PlayerScoreItem scoreItem, CancellationToken cancellationToken)
         {
-            
             // init serializer
             var options = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
-            
+
             //load data
             string jsonString;
             var fileName = $"{nameof(TerminalTetris)}.json";
@@ -53,13 +51,14 @@ namespace TerminalTetris.Screens
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);
                 _letterBoard = JsonSerializer.Deserialize<IList<PlayerScoreItem>>(jsonString, options);
             }
-            
+
             // join actual scores
-            var item = _letterBoard.FirstOrDefault(x => x.Player.Equals(scoreItem.Player, StringComparison.OrdinalIgnoreCase));
+            var item = _letterBoard.FirstOrDefault(x =>
+                x.Player.Equals(scoreItem.Player, StringComparison.OrdinalIgnoreCase));
             _letterBoard.Remove(item);
-            
+
             _letterBoard.Add(scoreItem);
-            
+
             // taking tops
             _letterBoard = _letterBoard
                 .OrderBy(x => x.Level)
@@ -81,13 +80,14 @@ namespace TerminalTetris.Screens
             var i = 1;
             foreach (var item in _letterBoard)
             {
-                await Display.OutAsync(21, 2+i,  item.Player, cancellationToken);
-                await Display.OutAsync(32, 2+i, 7, item.Level.ToString(), cancellationToken);
-                await Display.OutAsync(41, 2+i, 4, item.Score.ToString(), cancellationToken);
+                await Display.OutAsync(21, 2 + i, item.Player, cancellationToken);
+                await Display.OutAsync(32, 2 + i, 7, item.Level.ToString(), cancellationToken);
+                await Display.OutAsync(41, 2 + i, 4, item.Score.ToString(), cancellationToken);
                 if (item.IsCurrentPlayer)
-                    await Display.OutAsync(45, 2+i, 3, Strings.CurrentPlayer, cancellationToken);                   
+                    await Display.OutAsync(45, 2 + i, 3, Strings.CurrentPlayer, cancellationToken);
                 i++;
             }
+
             await Display.OutAsync(10, 24, Strings.PlayAgain, cancellationToken);
         }
 
@@ -101,6 +101,7 @@ namespace TerminalTetris.Screens
                 if (input.Equals(Strings.No, StringComparison.OrdinalIgnoreCase))
                     return await Task.FromResult(false);
             }
+
             return await Task.FromResult((bool?) null);
         }
     }
