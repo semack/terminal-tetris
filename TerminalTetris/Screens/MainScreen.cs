@@ -13,7 +13,7 @@ namespace TerminalTetris.Screens
         {
         }
 
-        public async Task<GameScore> PlayGameAsync(int userLevel, CancellationToken cancellationToken)
+        public async Task<PlayerScoreItem> PlayGameAsync(int userLevel, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

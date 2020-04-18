@@ -10,8 +10,17 @@ namespace TerminalTetris.IO
         public override async Task ClearAsync(CancellationToken cancellationToken = default)
         {
             Terminal.ClearScreen();
-            
+
             await Task.CompletedTask;
+        }
+
+        public override async Task OutAsync(int x, int y, int width, string output,
+            CancellationToken cancellationToken = default)
+        {
+            var xx = x;
+            //if (width > output.Length)
+                xx = x + width - output.Length;
+            await OutAsync(xx, y, output, cancellationToken);
         }
 
         public override Task<(int Width, int Height)> GetWidthHeightAsync(CancellationToken cancellationToken = default)

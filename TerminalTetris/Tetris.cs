@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.IO;
+using TerminalTetris.Common;
 using TerminalTetris.Definitions;
+using TerminalTetris.Resources;
 using TerminalTetris.Screens;
 
 namespace TerminalTetris
@@ -21,29 +23,36 @@ namespace TerminalTetris
         {
             var (width, height) = await Display.GetWidthHeightAsync(cancellationToken);
             if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
-                throw new ArgumentException(
-                    $"The game has been designed for screen {Constants.ScreenWidth} x {Constants.ScreenHeight} symbols. Please adjust terminal window size.");
+                throw new ArgumentException(string.Format(Strings.ScreenResolutionError, 
+                    Constants.ScreenWidth, Constants.ScreenHeight));
         }
 
         public override async Task RunAsync(CancellationToken cancellationToken = default)
         {
             ThreadPool.QueueUserWorkItem(async state =>
             {
-                var splash = new SplashScreen(this);
-                var main = new MainScreen(this);
-                var score = new ScoresScreen(this);
+                var splashScreen = new SplashScreen(this);
+                var mainScreen = new MainScreen(this);
+                var scoresScreen = new ScoresScreen(this);
 
                 await base.RunAsync(cancellationToken);
 
-                var isGameFinished = false;
-                while (!isGameFinished)
+                var playAgain = true;
+                while (playAgain)
                 {
-                    var userLevel = await splash.GetUserLevelAsync(cancellationToken);
-                    var scores = await main.PlayGameAsync(userLevel, cancellationToken);
-                    isGameFinished = await score.ShowLetterBoardAsync(scores, cancellationToken);
+                    var playerLevel = await splashScreen.GetPlayerLevelAsync(cancellationToken);
+                    var scores = new PlayerScoreItem()
+                    {
+                        Player = @"СЕРГЕЙ ФРОЛОВ",
+                        Level = 5,
+                        Score = 1676,
+                        IsCurrentPlayer = true
+                    };
+                    // var scores = await main.PlayGameAsync(playerLevel, cancellationToken);
+                    playAgain = await scoresScreen.ShowLetterBoardAsync(scores, cancellationToken);
                 }
+                Terminal.GenerateBreakSignal(TerminalBreakSignal.Quit);
             }, cancellationToken);
-            
             await base.RunAsync(cancellationToken);
         }
     }

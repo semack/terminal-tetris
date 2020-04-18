@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GameFramework.EventArgs;
-using GameFramework.IO;
 
 namespace GameFramework.Components
 {
@@ -11,12 +9,12 @@ namespace GameFramework.Components
         private bool _enabled;
         private int _updateOrder;
 
-        public Game Game { get; }
-
         protected GameComponent(Game game)
         {
             Game = game ?? throw new ArgumentException(nameof(game));
         }
+
+        public Game Game { get; }
 
         public bool Enabled
         {

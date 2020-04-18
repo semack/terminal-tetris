@@ -16,9 +16,9 @@ namespace TerminalTetris.IO
                 Terminal.IsCursorVisible = false;
                 Terminal.IsCursorBlinking = false;
             }
-            
+
             var key = Terminal.ReadRaw();
-            
+
             if (key == 3) // Ctrl + C
                 Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
 

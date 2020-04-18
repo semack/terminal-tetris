@@ -8,33 +8,31 @@ using GameFramework.IO;
 
 namespace GameFramework
 {
-    public abstract class Game: BaseGameComponent
+    public abstract class Game : BaseGameComponent
     {
-        private bool _initialized;
-
         protected Game(Display display, Keyboard keyboard, TimeSpan targetElapsedTime)
         {
+            Components = new GameComponentsCollection();
             Display = display;
             Keyboard = keyboard;
             TargetElapsedTime = targetElapsedTime;
         }
 
-        public readonly  GameComponentsCollection Components = new GameComponentsCollection();
+        public GameComponentsCollection Components { get; }
 
         public Display Display { get; }
         public Keyboard Keyboard { get; }
-
         public TimeSpan TargetElapsedTime { get; }
+
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var item in Components) await item.InitializeAsync(cancellationToken);
+            await base.InitializeAsync(cancellationToken);
+        }
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
-            if (!_initialized)
-            {
-                await base.InitializeAsync(cancellationToken);
-                foreach (var item in Components) await item.InitializeAsync(cancellationToken);
-                _initialized = true;
-            }
-
+            await InitializeAsync(cancellationToken);
             ThreadPool.QueueUserWorkItem(async state =>
             {
                 while (!cancellationToken.IsCancellationRequested)
@@ -49,14 +47,9 @@ namespace GameFramework
         {
             var args = new GameUpdateEventArgs(new TimeSpan(), new TimeSpan());
             await UpdateAsync(this, args, cancellationToken);
-        }
-
-        public override async Task UpdateAsync(object sender, GameUpdateEventArgs args,
-            CancellationToken cancellationToken = default)
-        {
             foreach (var item in Components.Where(x => x.Enabled).OrderBy(x => x.UpdateOrder))
             {
-                await item.UpdateAsync(sender, args, cancellationToken);
+                await item.UpdateAsync(item, args, cancellationToken);
 
                 if (cancellationToken.IsCancellationRequested)
                     break;

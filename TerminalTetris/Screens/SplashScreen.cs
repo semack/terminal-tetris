@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.Components;
@@ -13,19 +12,19 @@ namespace TerminalTetris.Screens
         {
         }
 
-        public async Task<int> GetUserLevelAsync(CancellationToken cancellationToken = default)
+        public async Task<int> GetPlayerLevelAsync(CancellationToken cancellationToken = default)
         {
-            int? userLevel = null;
-            while (userLevel == null)
+            int? playerLevel = null;
+            while (playerLevel == null)
             {
-                await DrawSplashAsync(cancellationToken);
-                userLevel = await InputLevelAsync(cancellationToken);
+                await DrawAsync(cancellationToken);
+                playerLevel = await InputLevelAsync(cancellationToken);
             }
 
-            return await Task.FromResult((int) userLevel);
+            return await Task.FromResult((int) playerLevel);
         }
 
-        private async Task DrawSplashAsync(CancellationToken cancellationToken = default)
+        private async Task DrawAsync(CancellationToken cancellationToken = default)
         {
             await Display.ClearAsync(cancellationToken);
             await Display.OutAsync(34, 9, Strings.SplashSymbol, cancellationToken);

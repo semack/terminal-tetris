@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using GameFramework.EventArgs;
-using GameFramework.IO;
 
 namespace GameFramework.Components
 {
