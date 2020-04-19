@@ -1,9 +1,0 @@
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/bin/Debug/netstandard2.1/Terminal.Game.Framework.deps.json
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/bin/Debug/netstandard2.1/Terminal.Game.Framework.dll
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/bin/Debug/netstandard2.1/Terminal.Game.Framework.pdb
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/obj/Debug/netstandard2.1/Terminal.Game.Framework.csprojAssemblyReference.cache
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/obj/Debug/netstandard2.1/Terminal.Game.Framework.csproj.CoreCompileInputs.cache
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/obj/Debug/netstandard2.1/Terminal.Game.Framework.AssemblyInfoInputs.cache
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/obj/Debug/netstandard2.1/Terminal.Game.Framework.AssemblyInfo.cs
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/obj/Debug/netstandard2.1/Terminal.Game.Framework.dll
-/Users/andriy.somak/Projects/Terminal.Tetris/Terminal.Game.Framework/obj/Debug/netstandard2.1/Terminal.Game.Framework.pdb
