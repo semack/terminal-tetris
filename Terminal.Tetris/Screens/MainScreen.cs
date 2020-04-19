@@ -1,21 +1,19 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GameFramework;
-using GameFramework.Components;
-using TerminalTetris.Common;
+using Terminal.Game.Framework.Components;
+using Terminal.Tetris.Common;
 
-namespace TerminalTetris.Screens
+namespace Terminal.Tetris.Screens
 {
     public class MainScreen : Screen
     {
-        public MainScreen(Game game) : base(game)
+        public MainScreen(Game.Framework.Game game) : base(game)
         {
         }
 
         public async Task<PlayerScoreItem> PlayGameAsync(int userLevel, CancellationToken cancellationToken)
         {
-            var result = new PlayerScoreItem()
+            var result = new PlayerScoreItem
             {
                 Player = "TEST",
                 Level = 7,

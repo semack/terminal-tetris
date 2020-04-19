@@ -1,4 +1,4 @@
-﻿namespace TerminalTetris.Definitions
+﻿namespace Terminal.Tetris.Definitions
 {
     public static class Constants
     {

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using GameFramework.IO;
+using Terminal.Game.Framework.IO;
 
-namespace TerminalTetris.IO
+namespace Terminal.Tetris.IO
 {
     public class TerminalDisplay : Display
     {
         public override async Task ClearAsync(CancellationToken cancellationToken = default)
         {
-            Terminal.ClearScreen();
+            System.Terminal.ClearScreen();
 
             await Task.CompletedTask;
         }
@@ -25,22 +24,22 @@ namespace TerminalTetris.IO
 
         public override Task<(int Width, int Height)> GetWidthHeightAsync(CancellationToken cancellationToken = default)
         {
-            var output = (Terminal.Size.Width, Terminal.Size.Height);
+            var output = (System.Terminal.Size.Width, System.Terminal.Size.Height);
 
             return Task.FromResult(output);
         }
 
         public override async Task OutAsync(string output, CancellationToken cancellationToken = default)
         {
-            Terminal.Out(output);
+            System.Terminal.Out(output);
 
             await Task.CompletedTask;
         }
 
         public override async Task OutAsync(int x, int y, string output, CancellationToken cancellationToken = default)
         {
-            Terminal.MoveCursorTo(x, y);
-            Terminal.Out(output);
+            System.Terminal.MoveCursorTo(x, y);
+            System.Terminal.Out(output);
 
             await Task.CompletedTask;
         }

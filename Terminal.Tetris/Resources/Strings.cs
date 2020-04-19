@@ -1,4 +1,4 @@
-namespace TerminalTetris.Resources
+namespace Terminal.Tetris.Resources
 {
     public static class Strings
     {

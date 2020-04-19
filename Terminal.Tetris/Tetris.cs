@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GameFramework;
-using GameFramework.IO;
-using TerminalTetris.Definitions;
-using TerminalTetris.Resources;
-using TerminalTetris.Screens;
+using Terminal.Game.Framework.IO;
+using Terminal.Tetris.Definitions;
+using Terminal.Tetris.Resources;
+using Terminal.Tetris.Screens;
 
-namespace TerminalTetris
+namespace Terminal.Tetris
 {
-    public class Tetris : Game
+    public class Tetris : Game.Framework.Game
     {
         public Tetris(Display display,
             Keyboard keyboard,
@@ -44,7 +43,7 @@ namespace TerminalTetris
                     playAgain = await scoresScreen.ShowLetterBoardAsync(scores, cancellationToken);
                 }
 
-                Terminal.GenerateBreakSignal(TerminalBreakSignal.Quit);
+                System.Terminal.GenerateBreakSignal(TerminalBreakSignal.Quit);
             }, cancellationToken);
             await base.RunAsync(cancellationToken);
         }

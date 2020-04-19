@@ -1,14 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using GameFramework;
-using GameFramework.Components;
-using TerminalTetris.Resources;
+using Terminal.Game.Framework.Components;
+using Terminal.Tetris.Resources;
 
-namespace TerminalTetris.Screens
+namespace Terminal.Tetris.Screens
 {
     public class SplashScreen : Screen
     {
-        public SplashScreen(Game game) : base(game)
+        public SplashScreen(Game.Framework.Game game) : base(game)
         {
         }
 

@@ -5,19 +5,18 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using GameFramework;
-using GameFramework.Components;
-using TerminalTetris.Common;
-using TerminalTetris.Definitions;
-using TerminalTetris.Resources;
+using Terminal.Game.Framework.Components;
+using Terminal.Tetris.Common;
+using Terminal.Tetris.Definitions;
+using Terminal.Tetris.Resources;
 
-namespace TerminalTetris.Screens
+namespace Terminal.Tetris.Screens
 {
     public class ScoresScreen : Screen
     {
         private IList<PlayerScoreItem> _letterBoard;
 
-        public ScoresScreen(Game game) : base(game)
+        public ScoresScreen(Game.Framework.Game game) : base(game)
         {
             _letterBoard = new List<PlayerScoreItem>();
         }
@@ -46,7 +45,7 @@ namespace TerminalTetris.Screens
 
             //load data
             string jsonString;
-            var fileName = $"{nameof(TerminalTetris)}.letterboard";
+            var fileName = $"{nameof(Terminal.Tetris)}.letterboard";
             if (File.Exists(fileName))
             {
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);
@@ -85,7 +84,7 @@ namespace TerminalTetris.Screens
                 await Display.OutAsync(27, 1 + i, 7, item.Level.ToString(), cancellationToken);
                 await Display.OutAsync(36, 1 + i, 4, item.Score.ToString(), cancellationToken);
                 if (item.IsCurrentPlayer)
-                    await Display.OutAsync(40, 1+ i, 3, Strings.CurrentPlayer, cancellationToken);
+                    await Display.OutAsync(40, 1 + i, 3, Strings.CurrentPlayer, cancellationToken);
                 i++;
             }
 
