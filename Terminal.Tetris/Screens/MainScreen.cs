@@ -51,12 +51,12 @@ namespace Terminal.Tetris.Screens
 
         private async Task InvalidateScores(CancellationToken cancellationToken = default)
         {
-            await IO.OutAsync(0, 0, $"{Strings.LinesCount}:", cancellationToken);
-            await IO.OutAsync(13, 0, 3, _scores.Lines.ToString(), cancellationToken);
-            await IO.OutAsync(0, 1, $"{Strings.Level}:", cancellationToken);
-            await IO.OutAsync(13,1, 3, _scores.Level.ToString(), cancellationToken);
-            await IO.OutAsync(2, 2, $"{Strings.Score}:", cancellationToken);
-            await IO.OutAsync(8, 2, 5, _scores.Level.ToString(), cancellationToken);
+            await IO.OutAsync(0, 1, $"{Strings.LinesCount}:", cancellationToken);
+            await IO.OutAsync(13, 1, 3, _scores.Lines.ToString(), cancellationToken);
+            await IO.OutAsync(0, 2, $"{Strings.Level}:", cancellationToken);
+            await IO.OutAsync(13,2, 3, _scores.Level.ToString(), cancellationToken);
+            await IO.OutAsync(2, 3, $"{Strings.Score}:", cancellationToken);
+            await IO.OutAsync(8, 3, 5, _scores.Level.ToString(), cancellationToken);
         }
 
         private async Task<string> ReadPlayerNameAsync(CancellationToken cancellationToken = default)
