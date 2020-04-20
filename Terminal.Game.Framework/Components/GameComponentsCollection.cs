@@ -9,10 +9,10 @@ namespace Terminal.Game.Framework.Components
         {
             base.Add(component);
 
-            component.UpdateOrder = Count;
-
-            if (component is DrawableGameComponent gameComponent)
-                gameComponent.DrawOrder = this.Count(x => x is DrawableGameComponent);
+            //
+            //
+            // if (component is DrawableGameComponent gameComponent)
+            //     gameComponent.DrawOrder = this.Count(x => x is DrawableGameComponent);
         }
     }
 }

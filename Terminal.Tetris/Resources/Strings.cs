@@ -12,11 +12,23 @@ namespace Terminal.Tetris.Resources
         public const string ScreenResolutionError =
             "The game has been designed for screen {0} x {1} symbols. Please adjust terminal window size.";
 
+        public const string LinesCount = "ПOЛНЫX CТPOК";
         public const string Name = "ИМЯ";
         public const string Level = "УРОВЕНЬ";
         public const string Score = "СЧЕТ";
         public const string CurrentPlayer = "**";
         
         public const string Box = "◼◼";
+        
+        public const string ReadPlayerName = "BAШE ИMЯ?";
+        
+        public const string MoveLeft = "7: НAЛEBO";
+        public const string MoveRight = "9: НAПPABO";
+        public const string Rotate = "8:ПOBOPOТ";
+        public const string SpeedUp = "4:УCКOPИТЬ";
+        public const string Drop = "5:CБPOCИТЬ";
+        public const string ShowNext = "1: ПOКAЗAТЬ  CЛEДУЮЩУЮ";
+        public const string ClearHelp = "0:  CТEPEТЬ ЭТOТ ТEКCТ";
+        public const string SpaceDrop = "ПPOБEЛ - CБPOCИТЬ";
     }
 }

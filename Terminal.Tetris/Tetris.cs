@@ -29,7 +29,7 @@ namespace Terminal.Tetris
             ThreadPool.QueueUserWorkItem(async state =>
             {
                 var splashScreen = new SplashScreen(this.IO);
-                var mainScreen = new MainScreen(this.IO);
+                var mainScreen = new MainScreen(this);
                 var scoresScreen = new ScoresScreen(this.IO);
 
                 await base.RunAsync(cancellationToken);

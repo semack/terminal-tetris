@@ -63,8 +63,8 @@ namespace Terminal.Tetris.Screens
 
             // taking tops
             _letterBoard = _letterBoard
-                .OrderBy(x => x.Level)
-                .ThenBy(x => x.Score)
+                .OrderByDescending(x => x.Level)
+                .ThenByDescending(x => x.Score)
                 .Take(Constants.MaxTopPlayers)
                 .ToList();
 

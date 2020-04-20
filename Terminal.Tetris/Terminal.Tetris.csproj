@@ -5,7 +5,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Components" />
     <Folder Include="IO\" />
     <Folder Include="Definitions\" />
     <Folder Include="Screens\" />

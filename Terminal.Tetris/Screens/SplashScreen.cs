@@ -13,7 +13,7 @@ namespace Terminal.Tetris.Screens
         {
         }
 
-        public async Task<int> GetPlayerLevelAsync(CancellationToken cancellationToken = default)
+        public async Task<short> GetPlayerLevelAsync(CancellationToken cancellationToken = default)
         {
             int? playerLevel = null;
             while (playerLevel == null)
@@ -22,7 +22,7 @@ namespace Terminal.Tetris.Screens
                 playerLevel = await InputLevelAsync(cancellationToken);
             }
 
-            return await Task.FromResult((int) playerLevel);
+            return await Task.FromResult((short) playerLevel);
         }
 
         private async Task DrawAsync(CancellationToken cancellationToken = default)
@@ -34,13 +34,13 @@ namespace Terminal.Tetris.Screens
             await IO.OutAsync(19, 20, Strings.YourLevel, cancellationToken);
         }
 
-        private async Task<int?> InputLevelAsync(CancellationToken cancellationToken = default)
+        private async Task<short?> InputLevelAsync(CancellationToken cancellationToken = default)
         {
-            int? result = null;
+            short? result = null;
 
             var input = await IO.ReadLineAsync(cancellationToken);
 
-            if (!int.TryParse(input, out var level)) return await Task.FromResult((int?) null);
+            if (!short.TryParse(input, out var level)) return await Task.FromResult((short?) null);
 
             if (level >= 0 || level <= 9) result = level;
 
