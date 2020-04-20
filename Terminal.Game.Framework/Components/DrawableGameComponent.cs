@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Terminal.Game.Framework.EventArgs;
+using Terminal.Game.Framework.Time;
 
 namespace Terminal.Game.Framework.Components
 {
@@ -49,7 +49,7 @@ namespace Terminal.Game.Framework.Components
             await Task.CompletedTask;
         }
 
-        public abstract Task DrawAsync(object sender, GameUpdateEventArgs args,
+        public abstract Task DrawAsync(object sender, GameTime args,
             CancellationToken cancellationToken = default);
     }
 }

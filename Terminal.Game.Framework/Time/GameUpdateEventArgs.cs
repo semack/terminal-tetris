@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Terminal.Game.Framework.EventArgs
+namespace Terminal.Game.Framework.Time
 {
-    public class GameUpdateEventArgs : System.EventArgs
+    public class GameTime 
     {
-        public GameUpdateEventArgs(TimeSpan elapsedGameTime, TimeSpan elapsedRealTime)
+        public GameTime(TimeSpan elapsedGameTime, TimeSpan elapsedRealTime)
         {
             ElapsedGameTime = elapsedGameTime;
             ElapsedRealTime = elapsedRealTime;

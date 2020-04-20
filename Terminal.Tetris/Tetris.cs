@@ -10,16 +10,15 @@ namespace Terminal.Tetris
 {
     public class Tetris : Game.Framework.Game
     {
-        public Tetris(Display display,
-            Keyboard keyboard,
+        public Tetris(GameIO io,
             TimeSpan targetElapsedTime)
-            : base(display, keyboard, targetElapsedTime)
+            : base(io, targetElapsedTime)
         {
         }
 
         public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            var (width, height) = await Display.GetWidthHeightAsync(cancellationToken);
+            var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
             if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
                 throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
                     Constants.ScreenWidth, Constants.ScreenHeight));
@@ -29,9 +28,9 @@ namespace Terminal.Tetris
         {
             ThreadPool.QueueUserWorkItem(async state =>
             {
-                var splashScreen = new SplashScreen(this);
-                var mainScreen = new MainScreen(this);
-                var scoresScreen = new ScoresScreen(this);
+                var splashScreen = new SplashScreen(this.IO);
+                var mainScreen = new MainScreen(this.IO);
+                var scoresScreen = new ScoresScreen(this.IO);
 
                 await base.RunAsync(cancellationToken);
 
