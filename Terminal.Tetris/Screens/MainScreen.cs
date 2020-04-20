@@ -56,17 +56,17 @@ namespace Terminal.Tetris.Screens
             await IO.OutAsync(0, 2, $"{Strings.Level}:", cancellationToken);
             await IO.OutAsync(13,2, 3, _scores.Level.ToString(), cancellationToken);
             await IO.OutAsync(2, 3, $"{Strings.Score}:", cancellationToken);
-            await IO.OutAsync(8, 3, 5, _scores.Level.ToString(), cancellationToken);
+            await IO.OutAsync(8, 3, 5, _scores.Score.ToString(), cancellationToken);
         }
 
         private async Task DrawGlassAsync(CancellationToken cancellationToken = default)
         {
-            for (int i = 0; i < 20; i++)
+            for (var i = 1; i < 21; i++)
             {
                 await IO.OutAsync(25, i, Strings.GlassItem, cancellationToken);
             }
-            await IO.OutAsync(25, 20, Strings.GlassBottom1, cancellationToken);
-            await IO.OutAsync(25, 21, Strings.GlassBottom2, cancellationToken);
+            await IO.OutAsync(25, 21, Strings.GlassBottom1, cancellationToken);
+            await IO.OutAsync(25, 22, Strings.GlassBottom2, cancellationToken);
         }
 
         private async Task<string> ReadPlayerNameAsync(CancellationToken cancellationToken = default)
