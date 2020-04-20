@@ -49,7 +49,7 @@ namespace Terminal.Tetris.Screens
             }
         }
 
-        private async Task InvalidateScores(CancellationToken cancellationToken = default)
+        private async Task InvalidateScoresAsync(CancellationToken cancellationToken = default)
         {
             await IO.OutAsync(0, 1, $"{Strings.LinesCount}:", cancellationToken);
             await IO.OutAsync(13, 1, 3, _scores.Lines.ToString(), cancellationToken);
@@ -59,7 +59,7 @@ namespace Terminal.Tetris.Screens
             await IO.OutAsync(8, 3, 5, _scores.Level.ToString(), cancellationToken);
         }
 
-        private async Task DrawGlass(CancellationToken cancellationToken = default)
+        private async Task DrawGlassAsync(CancellationToken cancellationToken = default)
         {
             for (int i = 0; i < 20; i++)
             {
@@ -81,8 +81,8 @@ namespace Terminal.Tetris.Screens
             _scores.Level = playerLevel;
             
             await IO.ClearAsync(cancellationToken);
-            await DrawGlass(cancellationToken);
-            await InvalidateScores(cancellationToken);
+            await DrawGlassAsync(cancellationToken);
+            await InvalidateScoresAsync(cancellationToken);
             await ShowHelpScreenAsync(true, cancellationToken);
             _scores.Player = await ReadPlayerNameAsync(cancellationToken);
             return await Task.FromResult(_scores);

@@ -26,6 +26,7 @@ namespace Terminal.Tetris
 
         public override async Task RunAsync(CancellationToken cancellationToken = default)
         {
+            await IO.OutAsync(Strings.GameCopyright, cancellationToken);
             ThreadPool.QueueUserWorkItem(async state =>
             {
                 var splashScreen = new SplashScreen(this.IO);
