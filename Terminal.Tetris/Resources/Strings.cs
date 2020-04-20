@@ -30,5 +30,8 @@ namespace Terminal.Tetris.Resources
         public const string ShowNext = "1: ПOКAЗAТЬ  CЛEДУЮЩУЮ";
         public const string ClearHelp = "0:  CТEPEТЬ ЭТOТ ТEКCТ";
         public const string SpaceDrop = "ПPOБEЛ - CБPOCИТЬ";
+        public const string GlassItem =    "<! . . . . . . . . . .!>";
+        public const string GlassBottom1 = "<!====================!>";
+        public const string GlassBottom2 = @"  \/\/\/\/\/\/\/\/\/\/  ";
     }
 }
