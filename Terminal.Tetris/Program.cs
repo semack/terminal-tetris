@@ -12,8 +12,7 @@ namespace Terminal.Tetris
         {
             using var cancellationTokenSource = new CancellationTokenSource();
 
-            var tetris = new Tetris(new TerminalDisplay(),
-                new TerminalKeyboard(),
+            var tetris = new Tetris(new TerminalIO(),
                 new TimeSpan(100));
 
             await tetris.RunAsync(cancellationTokenSource.Token);

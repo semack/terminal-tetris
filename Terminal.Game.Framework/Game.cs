@@ -10,18 +10,16 @@ namespace Terminal.Game.Framework
 {
     public abstract class Game : BaseGameComponent
     {
-        protected Game(Display display, Keyboard keyboard, TimeSpan targetElapsedTime)
+        protected Game(GameIO io, TimeSpan targetElapsedTime)
         {
             Components = new GameComponentsCollection();
-            Display = display;
-            Keyboard = keyboard;
+            IO = io;
             TargetElapsedTime = targetElapsedTime;
         }
 
         public GameComponentsCollection Components { get; }
 
-        public Display Display { get; }
-        public Keyboard Keyboard { get; }
+        public GameIO IO { get; }
         public TimeSpan TargetElapsedTime { get; }
 
         public override async Task InitializeAsync(CancellationToken cancellationToken = default)

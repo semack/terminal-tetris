@@ -1,13 +1,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Game.Framework.Components;
+using Terminal.Game.Framework.IO;
 using Terminal.Tetris.Common;
+using Terminal.Tetris.Models;
 
 namespace Terminal.Tetris.Screens
 {
     public class MainScreen : Screen
     {
-        public MainScreen(Game.Framework.Game game) : base(game)
+        public MainScreen(GameIO io) : base(io)
         {
         }
 

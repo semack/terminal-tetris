@@ -1,13 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Game.Framework.Components;
+using Terminal.Game.Framework.IO;
+using Terminal.Tetris.Common;
 using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
     public class SplashScreen : Screen
     {
-        public SplashScreen(Game.Framework.Game game) : base(game)
+        public SplashScreen(GameIO io) : base(io)
         {
         }
 
@@ -25,18 +27,18 @@ namespace Terminal.Tetris.Screens
 
         private async Task DrawAsync(CancellationToken cancellationToken = default)
         {
-            await Display.ClearAsync(cancellationToken);
-            await Display.OutAsync(33, 6, Strings.SplashSymbol, cancellationToken);
-            await Display.OutAsync(33, 7, Strings.SplashLogo, cancellationToken);
-            await Display.OutAsync(41, 8, Strings.SplashSymbol, cancellationToken);
-            await Display.OutAsync(19, 20, Strings.YourLevel, cancellationToken);
+            await IO.ClearAsync(cancellationToken);
+            await IO.OutAsync(33, 6, Strings.SplashSymbol, cancellationToken);
+            await IO.OutAsync(33, 7, Strings.SplashLogo, cancellationToken);
+            await IO.OutAsync(41, 8, Strings.SplashSymbol, cancellationToken);
+            await IO.OutAsync(19, 20, Strings.YourLevel, cancellationToken);
         }
 
         private async Task<int?> InputLevelAsync(CancellationToken cancellationToken = default)
         {
             int? result = null;
 
-            var input = await Keyboard.ReadLineAsync(cancellationToken);
+            var input = await IO.ReadLineAsync(cancellationToken);
 
             if (!int.TryParse(input, out var level)) return await Task.FromResult((int?) null);
 
