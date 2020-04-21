@@ -1,9 +1,7 @@
-using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Game.Framework.Components;
 using Terminal.Game.Framework.Time;
-using Terminal.Tetris.Common;
 using Terminal.Tetris.Components;
 using Terminal.Tetris.Models;
 using Terminal.Tetris.Resources;
@@ -92,10 +90,7 @@ namespace Terminal.Tetris.Screens
 
             Enabled = true;
             
-            while (_isGameActive)
-            {
-                await Task.Delay(10, cancellationToken);
-            }
+            while (_isGameActive && !cancellationToken.IsCancellationRequested) { }
 
             Enabled = false;
             

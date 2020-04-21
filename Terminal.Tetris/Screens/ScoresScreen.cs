@@ -6,26 +6,24 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Game.Framework.Components;
-using Terminal.Game.Framework.IO;
-using Terminal.Tetris.Common;
 using Terminal.Tetris.Definitions;
 using Terminal.Tetris.Models;
 using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
-    public class ScoresScreen : Screen
+    public class ScoresScreen : GameComponent
     {
         private IList<PlayerScoreItem> _letterBoard;
 
-        public ScoresScreen(GameIO io) : base(io)
+        public ScoresScreen(Game.Framework.Game  game) : base(game)
         {
             _letterBoard = new List<PlayerScoreItem>();
         }
 
         public async Task<bool> ShowLetterBoardAsync(PlayerScoreItem scores, CancellationToken cancellationToken)
         {
-            await LoadScoresAsync(scores, cancellationToken);
+            await UpdateScoresAsync(scores, cancellationToken);
             bool? playAgain = null;
             while (playAgain == null)
             {
@@ -36,7 +34,7 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult((bool) playAgain);
         }
 
-        private async Task LoadScoresAsync(PlayerScoreItem scoreItem, CancellationToken cancellationToken)
+        private async Task UpdateScoresAsync(PlayerScoreItem scoreItem, CancellationToken cancellationToken)
         {
             // init serializer
             var options = new JsonSerializerOptions

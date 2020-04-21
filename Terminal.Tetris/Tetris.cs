@@ -28,9 +28,9 @@ namespace Terminal.Tetris
         {
             await IO.OutAsync(Strings.GameCopyright, cancellationToken);
             
-            var splashScreen = new SplashScreen(this.IO);
+            var splashScreen = new SplashScreen(this);
             var mainScreen = new MainScreen(this);
-            var scoresScreen = new ScoresScreen(this.IO);
+            var scoresScreen = new ScoresScreen(this);
             Components.Add(mainScreen);
             
            ThreadPool.QueueUserWorkItem(async state =>
