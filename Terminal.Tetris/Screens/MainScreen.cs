@@ -1,5 +1,8 @@
+using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
+using Terminal.Game.Framework.Components;
+using Terminal.Game.Framework.Time;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.Components;
 using Terminal.Tetris.Models;
@@ -7,14 +10,14 @@ using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
-    public class MainScreen : Screen
+    public class MainScreen : DrawableGameComponent
     {
         private readonly Game.Framework.Game _game;
 
         private readonly Glass _glass;
         private readonly PlayerScoreItem _scores;
         
-        public MainScreen(Game.Framework.Game game) : base(game.IO)
+        public MainScreen(Game.Framework.Game game) : base(game)
         {
             _scores = new PlayerScoreItem()
             {
@@ -76,6 +79,8 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult(result);
         }
 
+        private bool _isGameActive = true;
+        
         public async Task<PlayerScoreItem> PlayGameAsync(short playerLevel, CancellationToken cancellationToken = default)
         {
             _scores.Level = playerLevel;
@@ -84,8 +89,32 @@ namespace Terminal.Tetris.Screens
             await DrawGlassAsync(cancellationToken);
             await InvalidateScoresAsync(cancellationToken);
             await ShowHelpScreenAsync(true, cancellationToken);
+
+            Enabled = true;
+            
+            while (_isGameActive)
+            {
+                await Task.Delay(10, cancellationToken);
+            }
+
+            Enabled = false;
+            
             _scores.Player = await ReadPlayerNameAsync(cancellationToken);
             return await Task.FromResult(_scores);
+        }
+
+        public override async Task UpdateAsync(object sender, GameTime time, CancellationToken cancellationToken = default)
+        {
+            var key = await IO.GetKeyAsync(cancellationToken);
+            if (key == 27)
+                _isGameActive = false;
+            
+            await base.UpdateAsync(sender, time, cancellationToken);
+        }
+
+        public override async Task DrawAsync(object sender, GameTime args, CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
         }
     }
 }

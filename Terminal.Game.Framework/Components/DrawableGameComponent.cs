@@ -20,7 +20,7 @@ namespace Terminal.Game.Framework.Components
             {
                 if (value == _visible) return;
                 _visible = value;
-                Task.Run(async () => { await VisibleChangedAsync(this, new System.EventArgs()); }).Start();
+                VisibleChanged(this, new System.EventArgs()); 
             }
         }
 
@@ -32,21 +32,17 @@ namespace Terminal.Game.Framework.Components
                 if (value != _drawOrder)
                 {
                     _drawOrder = value;
-                    Task.Run(async () => { await DrawOrderChangedAsync(this, new System.EventArgs()); }).Start();
+                    DrawOrderChanged(this, new System.EventArgs());
                 }
             }
         }
 
-        protected virtual async Task VisibleChangedAsync(object sender, System.EventArgs eventArgs,
-            CancellationToken cancellationToken = default)
+        protected virtual void VisibleChanged(object sender, System.EventArgs eventArgs)
         {
-            await Task.CompletedTask;
         }
 
-        protected virtual async Task DrawOrderChangedAsync(object sender, System.EventArgs eventArgs,
-            CancellationToken cancellationToken = default)
+        protected virtual void DrawOrderChanged(object sender, System.EventArgs eventArgs)
         {
-            await Task.CompletedTask;
         }
 
         public abstract Task DrawAsync(object sender, GameTime args,

@@ -14,12 +14,12 @@ namespace Terminal.Tetris
 
             var tetris = new Tetris(new TerminalIO(),
                 new TimeSpan(100));
-
+            
             await tetris.RunAsync(cancellationTokenSource.Token);
-
+            
             await TerminalHost
                 .CreateDefaultBuilder()
-                .RunTerminalAsync(options =>
+                .RunTerminalAsync( options =>
                 {
                     options.Title = nameof(Terminal.Tetris);
                     options.SuppressStatusMessages = true;

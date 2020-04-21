@@ -27,11 +27,14 @@ namespace Terminal.Tetris
         public override async Task RunAsync(CancellationToken cancellationToken = default)
         {
             await IO.OutAsync(Strings.GameCopyright, cancellationToken);
-            ThreadPool.QueueUserWorkItem(async state =>
-            {
-                var splashScreen = new SplashScreen(this.IO);
-                var mainScreen = new MainScreen(this);
-                var scoresScreen = new ScoresScreen(this.IO);
+            
+            var splashScreen = new SplashScreen(this.IO);
+            var mainScreen = new MainScreen(this);
+            var scoresScreen = new ScoresScreen(this.IO);
+            Components.Add(mainScreen);
+            
+           ThreadPool.QueueUserWorkItem(async state =>
+           {
 
                 await base.RunAsync(cancellationToken);
 

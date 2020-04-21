@@ -53,11 +53,16 @@ namespace Terminal.Tetris.Screens
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);
                 _letterBoard = JsonSerializer.Deserialize<IList<PlayerScoreItem>>(jsonString, options);
             }
+            
+            // normalize
+            _letterBoard = _letterBoard.Where(x => x.Player != null).ToList();
 
             // join actual scores
-            var item = _letterBoard.FirstOrDefault(x =>
-                x.Player.Equals(scoreItem.Player, StringComparison.OrdinalIgnoreCase));
-            _letterBoard.Remove(item);
+            var item = _letterBoard.FirstOrDefault(x => x.Player.Equals(scoreItem.Player, 
+                StringComparison.OrdinalIgnoreCase));
+            
+            if (item != null)
+                _letterBoard.Remove(item);
 
             _letterBoard.Add(scoreItem);
 

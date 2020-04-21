@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Terminal.Game.Framework.IO;
 
 namespace Terminal.Game.Framework.Components
 {
@@ -8,13 +9,14 @@ namespace Terminal.Game.Framework.Components
     {
         private bool _enabled;
         private int _updateOrder;
+        private Game _game;
 
         protected GameComponent(Game game)
         {
-            Game = game ?? throw new ArgumentException(nameof(game));
+            _game = game ?? throw new ArgumentException(nameof(game));
         }
 
-        public Game Game { get; }
+        public GameIO IO => _game.IO;
 
         public bool Enabled
         {
@@ -23,7 +25,7 @@ namespace Terminal.Game.Framework.Components
             {
                 if (value == _enabled) return;
                 _enabled = value;
-                Task.Run(async () => { await EnabledChangedAsync(this, new System.EventArgs()); }).Start();
+                EnabledChanged(this, new System.EventArgs());
             }
         }
 
@@ -34,22 +36,18 @@ namespace Terminal.Game.Framework.Components
             {
                 if (value == _updateOrder) return;
                 _updateOrder = value;
-                Task.Run(async () => { await UpdateOrderChangedAsync(this, new System.EventArgs()); }).Start();
+               UpdateOrderChanged(this, new System.EventArgs());
             }
         }
 
 
-        protected virtual async Task EnabledChangedAsync(object sender, System.EventArgs eventArgs,
-            CancellationToken cancellationToken = default)
+        protected virtual void EnabledChanged(object sender, System.EventArgs eventArgs)
         {
-            await Task.CompletedTask;
         }
 
 
-        protected virtual async Task UpdateOrderChangedAsync(object sender, System.EventArgs eventArgs,
-            CancellationToken cancellationToken = default)
+        protected virtual void UpdateOrderChanged(object sender, System.EventArgs eventArgs)
         {
-            await Task.CompletedTask;
         }
     }
 }
