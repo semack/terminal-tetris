@@ -5,25 +5,26 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Terminal.Game.Framework.Components;
+using Terminal.Tetris.Common;
 using Terminal.Tetris.Definitions;
+using Terminal.Tetris.IO;
 using Terminal.Tetris.Models;
 using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
-    public class ScoresScreen : GameComponent
+    public class ScoresScreen : BaseComponent
     {
-        private IList<PlayerScoreItem> _letterBoard;
+        private IList<LetterBoardItem> _letterBoard;
 
-        public ScoresScreen(Game.Framework.Game  game) : base(game)
+        public ScoresScreen(TerminalIO io) : base(io)
         {
-            _letterBoard = new List<PlayerScoreItem>();
+            _letterBoard = new List<LetterBoardItem>();
         }
 
-        public async Task<bool> ShowLetterBoardAsync(PlayerScoreItem scores, CancellationToken cancellationToken)
+        public async Task<bool> ShowLetterBoardAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken)
         {
-            await UpdateScoresAsync(scores, cancellationToken);
+            await UpdateScoresAsync(scoresItem, cancellationToken);
             bool? playAgain = null;
             while (playAgain == null)
             {
@@ -34,7 +35,7 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult((bool) playAgain);
         }
 
-        private async Task UpdateScoresAsync(PlayerScoreItem scoreItem, CancellationToken cancellationToken)
+        private async Task UpdateScoresAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken)
         {
             // init serializer
             var options = new JsonSerializerOptions
@@ -49,20 +50,20 @@ namespace Terminal.Tetris.Screens
             if (File.Exists(fileName))
             {
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);
-                _letterBoard = JsonSerializer.Deserialize<IList<PlayerScoreItem>>(jsonString, options);
+                _letterBoard = JsonSerializer.Deserialize<IList<LetterBoardItem>>(jsonString, options);
             }
-            
+
             // normalize
             _letterBoard = _letterBoard.Where(x => x.Player != null).ToList();
 
             // join actual scores
-            var item = _letterBoard.FirstOrDefault(x => x.Player.Equals(scoreItem.Player, 
+            var item = _letterBoard.FirstOrDefault(x => x.Player.Equals(scoresItem.Player,
                 StringComparison.OrdinalIgnoreCase));
-            
+
             if (item != null)
                 _letterBoard.Remove(item);
 
-            _letterBoard.Add(scoreItem);
+            _letterBoard.Add(scoresItem);
 
             // taking tops
             _letterBoard = _letterBoard
