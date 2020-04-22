@@ -6,6 +6,6 @@
         public const int ScreenHeight = 24;
         public const int MaxTopPlayers = 20;
         public const int MainLoopMilliseconds = 10;
-        public const int LevelSpeedMultiplier = 500;
+        public const int LevelSpeedMultiplier = 250;
     }
 }

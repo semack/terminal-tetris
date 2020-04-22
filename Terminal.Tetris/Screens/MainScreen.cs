@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
@@ -15,6 +16,8 @@ namespace Terminal.Tetris.Screens
         private readonly PlayerScoresItem _scores;
         private bool _helpVisible;
         private bool _nextFigureVisible;
+
+        private byte[,] _glass = new byte[20, 20];
 
         public MainScreen(TerminalIO io) : base(io)
         {
@@ -35,7 +38,7 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult(result);
         }
 
-        private async Task DrawHelpAsync(CancellationToken cancellationToken = default)
+        private async Task DisplayHelpAsync(CancellationToken cancellationToken = default)
         {
             _helpVisible = !_helpVisible;
             if (_helpVisible)
@@ -55,21 +58,21 @@ namespace Terminal.Tetris.Screens
                 for (var i = 0; i < 6; i++) await IO.OutAsync(52, 2 + i, cleanLine, cancellationToken);
             }
         }
-        
-        private async Task DrawNextFigureAsync(CancellationToken cancellationToken = default)
+
+        private async Task DisplayNextFigureAsync(CancellationToken cancellationToken = default)
         {
             _nextFigureVisible = !_nextFigureVisible;
             if (_helpVisible)
             {
-                //
             }
             else
-            {        
-//
+            {
+                var cleanLine = new string(' ', 25);
+                for (var i = 0; i < 6; i++) await IO.OutAsync(52, 2 + i, cleanLine, cancellationToken);
             }
         }
 
-        private async Task DrawScoresAsync(CancellationToken cancellationToken = default)
+        private async Task DisplayScoresAsync(CancellationToken cancellationToken = default)
         {
             await IO.OutAsync(0, 1, $"{Strings.LinesCount}:", cancellationToken);
             await IO.OutAsync(13, 1, 3, _scores.Lines.ToString(), cancellationToken);
@@ -83,39 +86,55 @@ namespace Terminal.Tetris.Screens
             CancellationToken cancellationToken = default)
         {
             _scores.Level = playerLevel;
+
             await IO.ClearAsync(cancellationToken);
-            await DrawHelpAsync(cancellationToken);
-            await DrawScoresAsync(cancellationToken);
+            await DisplayHelpAsync(cancellationToken);
+            await DisplayScoresAsync(cancellationToken);
             await DrawGlassAsync(cancellationToken);
 
+            
+            // key polling background loop
+            ThreadPool.QueueUserWorkItem(async state =>
+            {
+                while (_isGameActive && !cancellationToken.IsCancellationRequested) 
+                {
+                    var playerAction = PlayerActionEnum.None;
+                    var key = await IO.GetKeyAsync(cancellationToken);
+                    if (key != null)
+                    {
+                        if (key == 3) // Ctrl+C - terminate program
+                            await IO.Terminate(cancellationToken);
+                        else if (key == 27) // ESC - stop game
+                            _isGameActive = false;
+                        else if (key == 48) // 0 - show/hide help screen
+                            await DisplayHelpAsync(cancellationToken);
+                        else if (key == 49) // 1 - show next figure
+                            await DisplayNextFigureAsync(cancellationToken);
+                        else if (key == 52) // 4 - speed up
+                            await SpeedUpAsync(cancellationToken);
+                        else if (key == 55 || key == 37) // 7 - left || cursor left
+                            playerAction = PlayerActionEnum.Left;
+                        else if (key == 57 || key == 39) // 9 - right || cursor right
+                            playerAction = PlayerActionEnum.Right;
+                        else if (key == 56 || key == 38) // 8 - rotate || cursor up
+                            playerAction = PlayerActionEnum.Rotate;
+                        else if (key == 53 || key == 40) // 5 - soft drop || cursor down
+                            playerAction = PlayerActionEnum.SoftDrop;
+                        else if (key == 32) // SPACE - drop
+                            playerAction = PlayerActionEnum.Drop;
+
+                        if (playerAction != PlayerActionEnum.None)
+                            await MoveFigureAsync(playerAction, cancellationToken);
+                    }
+                }
+            }, cancellationToken);
+            
+            // main loop
             while (_isGameActive && !cancellationToken.IsCancellationRequested)
             {
-                var key = await IO.GetKeyAsync(cancellationToken);
-                
-                if (key != null)
-                {
-                    if (key == 3)  // Ctrl+C - terminate program
-                        await IO.Terminate(cancellationToken);
-                    else if (key == 27)  // ESC - stop game
-                        _isGameActive = false;
-                    else if (key == 48)  // 0 - show/hide help screen
-                        await DrawHelpAsync(cancellationToken);
-                    else if (key == 49)  // 1 - show next figure
-                        await DrawNextFigureAsync(cancellationToken);
-                    else if (key == 52)  // 4 - speed up
-                        await SpeedUpAsync(cancellationToken);
-                    else if (key == 55)   // 7 - left 
-                        await DoGlassAction(GlassActionEnum.Left, cancellationToken);
-                    else if (key == 57)  // 9 - right
-                        await DoGlassAction(GlassActionEnum.Right, cancellationToken);
-                    else if (key == 56)  // 8 - rotate
-                        await DoGlassAction(GlassActionEnum.Rotate, cancellationToken);
-                    else if (key == 53)  // 5 - soft  drop
-                        await DoGlassAction(GlassActionEnum.SoftDrop, cancellationToken);
-                    else if (key == 32)  // SPACE - drop
-                        await DoGlassAction(GlassActionEnum.Drop, cancellationToken);
-                }
-                await Task.Delay(Constants.MainLoopMilliseconds, cancellationToken);
+                var loopLength = Math.Abs(Constants.LevelSpeedMultiplier / (_scores.Level+1));
+                await MoveFigureAsync(PlayerActionEnum.None, cancellationToken);
+                await Task.Delay(loopLength, cancellationToken);
             }
 
             var result = new LetterBoardItem
@@ -131,12 +150,16 @@ namespace Terminal.Tetris.Screens
         private async Task SpeedUpAsync(CancellationToken cancellationToken)
         {
             if (_scores.Level < 9)
+            {
                 _scores.Level++;
-            await Task.CompletedTask;
+                await DisplayScoresAsync(cancellationToken);
+            }
         }
 
-        private async Task DoGlassAction(GlassActionEnum action, CancellationToken cancellationToken = default)
+        private async Task MoveFigureAsync(PlayerActionEnum action,
+            CancellationToken cancellationToken)
         {
+            await IO.OutAsync(2, 10, DateTime.Now.TimeOfDay.TotalMilliseconds.ToString(), CancellationToken.None);
             await Task.CompletedTask;
         }
     }

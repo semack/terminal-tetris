@@ -1,7 +1,8 @@
 namespace Terminal.Tetris.Enums
 {
-    public enum GlassActionEnum
+    public enum PlayerActionEnum
     {
+        None,
         Left,
         Right,
         Rotate,

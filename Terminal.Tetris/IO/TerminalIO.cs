@@ -48,16 +48,13 @@ namespace Terminal.Tetris.IO
         {
             if (!System.Terminal.IsRawMode)
             {
-                System.Terminal.SetRawMode(true, true);
+                System.Terminal.SetRawMode(true, false);
 
                 System.Terminal.IsCursorVisible = false;
                 System.Terminal.IsCursorBlinking = false;
             }
 
             var key = System.Terminal.ReadRaw();
-
-            if (key == 3) // Ctrl + C
-                System.Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
 
             return await Task.FromResult(key);
         }
