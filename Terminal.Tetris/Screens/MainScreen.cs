@@ -1,6 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
+using Terminal.Tetris.Definitions;
+using Terminal.Tetris.Enums;
 using Terminal.Tetris.IO;
 using Terminal.Tetris.Models;
 using Terminal.Tetris.Resources;
@@ -12,6 +14,7 @@ namespace Terminal.Tetris.Screens
         private bool _isGameActive = true;
         private readonly PlayerScoresItem _scores;
         private bool _helpVisible;
+        private bool _nextFigureVisible;
 
         public MainScreen(TerminalIO io) : base(io)
         {
@@ -52,6 +55,19 @@ namespace Terminal.Tetris.Screens
                 for (var i = 0; i < 6; i++) await IO.OutAsync(52, 2 + i, cleanLine, cancellationToken);
             }
         }
+        
+        private async Task DrawNextFigureAsync(CancellationToken cancellationToken = default)
+        {
+            _nextFigureVisible = !_nextFigureVisible;
+            if (_helpVisible)
+            {
+                //
+            }
+            else
+            {        
+//
+            }
+        }
 
         private async Task DrawScoresAsync(CancellationToken cancellationToken = default)
         {
@@ -75,19 +91,31 @@ namespace Terminal.Tetris.Screens
             while (_isGameActive && !cancellationToken.IsCancellationRequested)
             {
                 var key = await IO.GetKeyAsync(cancellationToken);
+                
                 if (key != null)
                 {
-                    if (key == 3)
+                    if (key == 3)  // Ctrl+C - terminate program
                         await IO.Terminate(cancellationToken);
-                    else
-                    if (key == 27)
+                    else if (key == 27)  // ESC - stop game
                         _isGameActive = false;
-                    else
-                    if (key == 48)
+                    else if (key == 48)  // 0 - show/hide help screen
                         await DrawHelpAsync(cancellationToken);
+                    else if (key == 49)  // 1 - show next figure
+                        await DrawNextFigureAsync(cancellationToken);
+                    else if (key == 52)  // 4 - speed up
+                        await SpeedUpAsync(cancellationToken);
+                    else if (key == 55)   // 7 - left 
+                        await DoGlassAction(GlassActionEnum.Left, cancellationToken);
+                    else if (key == 57)  // 9 - right
+                        await DoGlassAction(GlassActionEnum.Right, cancellationToken);
+                    else if (key == 56)  // 8 - rotate
+                        await DoGlassAction(GlassActionEnum.Rotate, cancellationToken);
+                    else if (key == 53)  // 5 - soft  drop
+                        await DoGlassAction(GlassActionEnum.SoftDrop, cancellationToken);
+                    else if (key == 32)  // SPACE - drop
+                        await DoGlassAction(GlassActionEnum.Drop, cancellationToken);
                 }
-
-                await Task.Delay(10, cancellationToken);
+                await Task.Delay(Constants.MainLoopMilliseconds, cancellationToken);
             }
 
             var result = new LetterBoardItem
@@ -98,6 +126,18 @@ namespace Terminal.Tetris.Screens
                 Player = await ReadPlayerNameAsync(cancellationToken)
             };
             return await Task.FromResult(result);
+        }
+
+        private async Task SpeedUpAsync(CancellationToken cancellationToken)
+        {
+            if (_scores.Level < 9)
+                _scores.Level++;
+            await Task.CompletedTask;
+        }
+
+        private async Task DoGlassAction(GlassActionEnum action, CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
         }
     }
 }
