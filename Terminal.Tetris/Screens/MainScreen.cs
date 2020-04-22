@@ -12,7 +12,7 @@ namespace Terminal.Tetris.Screens
 {
     public class MainScreen : BaseComponent
     {
-        private bool _isGameActive = true;
+        private bool _isGameActive;
         private readonly PlayerScoresItem _scores;
         private bool _helpVisible;
         private bool _nextFigureVisible;
@@ -67,8 +67,8 @@ namespace Terminal.Tetris.Screens
             }
             else
             {
-                var cleanLine = new string(' ', 25);
-                for (var i = 0; i < 6; i++) await IO.OutAsync(52, 2 + i, cleanLine, cancellationToken);
+                var cleanLine = new string(' ', 8);
+                for (var i = 0; i < 2; i++) await IO.OutAsync(16, 10 + i, cleanLine, cancellationToken);
             }
         }
 
@@ -86,12 +86,14 @@ namespace Terminal.Tetris.Screens
             CancellationToken cancellationToken = default)
         {
             _scores.Level = playerLevel;
+            _scores.Lines = 0;
+            _scores.Score = 0;
+            _isGameActive = true;
 
             await IO.ClearAsync(cancellationToken);
             await DisplayHelpAsync(cancellationToken);
             await DisplayScoresAsync(cancellationToken);
             await DrawGlassAsync(cancellationToken);
-
             
             // key polling background loop
             ThreadPool.QueueUserWorkItem(async state =>
