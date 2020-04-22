@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Terminal.Tetris.Models
 {
     public class PlayerScoresItem
