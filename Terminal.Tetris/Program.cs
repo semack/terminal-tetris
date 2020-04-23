@@ -21,9 +21,9 @@ namespace Terminal.Tetris
                     {
                         services.AddSingleton<IHostedService, TetrisService>();
                         services.AddSingleton<TerminalIO>();
-                        services.AddSingleton<SplashScreen>();
-                        services.AddSingleton<LetterBoardScreen>();
-                        services.AddSingleton<GameScreen>();
+                        services.AddTransient<SplashScreen>();
+                        services.AddTransient<LetterBoardScreen>();
+                        services.AddTransient<GameScreen>();
                         services.AddTransient<HelpBoard>();
                         services.AddTransient<ScoreBoard>();
                         services.AddTransient(x => new Glass(x.GetRequiredService<TerminalIO>(), 27, 1));
