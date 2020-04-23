@@ -13,8 +13,6 @@ namespace Terminal.Tetris.Screens
 {
     public class MainScreen : BaseComponent
     {
-        //private readonly PlayerScoresItem _scores;
-
         private readonly Glass _glass;
         private readonly HelpBoard _helpBoard;
         private readonly ScoreBoard _scoreBoard;
