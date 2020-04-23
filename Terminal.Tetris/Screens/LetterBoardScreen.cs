@@ -46,7 +46,7 @@ namespace Terminal.Tetris.Screens
 
             //load data
             string jsonString;
-            var fileName = $"{nameof(Terminal.Tetris)}.letterboard";
+            var fileName = $"{nameof(Terminal.Tetris)}.letterBoard";
             if (File.Exists(fileName))
             {
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);
@@ -93,12 +93,11 @@ namespace Terminal.Tetris.Screens
                     await IO.OutAsync(40, 1 + i, 3, Strings.CurrentPlayer, cancellationToken);
                 i++;
             }
-
-            await IO.OutAsync(13, 23, Strings.PlayAgain, cancellationToken);
         }
 
         private async Task<bool?> PlayerInputAsync(CancellationToken cancellationToken = default)
         {
+            await IO.OutAsync(13, 23, Strings.PlayAgain, cancellationToken);
             var input = await IO.ReadLineAsync(cancellationToken);
             if (!string.IsNullOrEmpty(input))
             {
