@@ -1,5 +1,5 @@
 # terminal-tetris
-The multi-platform Tetris game designed for text terminals.
+The multi-platform TETRIS game designed for text terminals.
 
 This port of [Aleksey's Pajitnov](https://tetris.fandom.com/wiki/Alexey_Pajitnov) TETRIS version has been created on my inspiration from my childhood time and experience playing it on  [DVK-3M](http://www.leningrad.su/museum/show_calc.php?n=241) (soviet [PDP-11](https://en.wikipedia.org/wiki/PDP-11) clone) in the eighties.
 
