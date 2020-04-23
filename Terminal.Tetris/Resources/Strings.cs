@@ -36,6 +36,6 @@ namespace Terminal.Tetris.Resources
 
         public const string GameCopyright = "TETRIS (c) 1984 by Alexey Pajitnov.\r\n\r\n" +
                                             "The game has been ported to .NET Core platform by Andriy S\'omak, 2020.\r\n" +
-                                            "Homepage url: https://github.com/semack/terminal-tetris";
+                                            "Homepage url: https://github.com/semack/terminal-tetris/";
     }
 }
