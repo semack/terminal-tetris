@@ -16,10 +16,10 @@ namespace Terminal.Tetris.Screens
         //private readonly PlayerScoresItem _scores;
 
         private readonly Glass _glass;
-        private bool _isGameActive;
-        private bool _nextFigureVisible;
         private readonly HelpMessage _helpMessage;
         private readonly ScoreBoard _scoreBoard;
+        private bool _isGameActive;
+        private bool _nextFigureVisible;
 
         public MainScreen(TerminalIO io, HelpMessage helpMessage, ScoreBoard scoreBoard, Glass glass) : base(io)
         {

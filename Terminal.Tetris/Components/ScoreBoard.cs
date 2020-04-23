@@ -6,10 +6,14 @@ using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Components
 {
-    public class ScoreBoard: BaseComponent
+    public class ScoreBoard : BaseComponent
     {
         private int _lines;
         private int _score;
+
+        public ScoreBoard(TerminalIO io) : base(io)
+        {
+        }
 
         public int Lines
         {
@@ -22,7 +26,7 @@ namespace Terminal.Tetris.Components
         }
 
         public short Level { get; private set; }
-        
+
         public int Score
         {
             get => _score;
@@ -31,10 +35,6 @@ namespace Terminal.Tetris.Components
                 _score = value;
                 InvalidateAsync().Wait();
             }
-        }
-        
-        public ScoreBoard(TerminalIO io) : base(io)
-        {
         }
 
         private async Task InvalidateAsync(CancellationToken cancellationToken = default)
@@ -46,7 +46,7 @@ namespace Terminal.Tetris.Components
             await IO.OutAsync(2, 3, $"{Strings.Score}:", cancellationToken);
             await IO.OutAsync(8, 3, 5, _score.ToString(), cancellationToken);
         }
-        
+
         public async Task ResetAsync(short playerLevel, CancellationToken cancellationToken = default)
         {
             Level = playerLevel;
@@ -54,7 +54,7 @@ namespace Terminal.Tetris.Components
             _score = 0;
             await InvalidateAsync(cancellationToken);
         }
-        
+
         public async Task SpeedUpAsync(CancellationToken cancellationToken)
         {
             if (Level < 9)

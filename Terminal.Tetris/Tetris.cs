@@ -12,13 +12,13 @@ namespace Terminal.Tetris
 {
     public class Tetris : BaseComponent, IHostedService
     {
-        private readonly SplashScreen _splashScreen;
         private readonly MainScreen _mainScreen;
         private readonly LetterBoardScreen _scoresScreen;
+        private readonly SplashScreen _splashScreen;
 
-        public Tetris(TerminalIO io, 
-            SplashScreen splashScreen, 
-            MainScreen mainScreen, 
+        public Tetris(TerminalIO io,
+            SplashScreen splashScreen,
+            MainScreen mainScreen,
             LetterBoardScreen scoresScreen)
             : base(io)
         {
@@ -27,18 +27,10 @@ namespace Terminal.Tetris
             _scoresScreen = scoresScreen;
         }
 
-        private async Task InitializeAsync(CancellationToken cancellationToken = default)
-        {
-            var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
-            if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
-                throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
-                    Constants.ScreenWidth, Constants.ScreenHeight));
-        }
-
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             await InitializeAsync(cancellationToken);
-            
+
             ThreadPool.QueueUserWorkItem(async state =>
             {
                 var playAgain = true;
@@ -56,6 +48,14 @@ namespace Terminal.Tetris
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await IO.OutAsync(0, 24, Strings.GameCopyright, cancellationToken);
+        }
+
+        private async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
+            if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
+                throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
+                    Constants.ScreenWidth, Constants.ScreenHeight));
         }
     }
 }
