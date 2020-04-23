@@ -11,14 +11,14 @@ using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
-    public class MainScreen : BaseComponent
+    public class GameScreen : BaseComponent
     {
         private readonly Glass _glass;
         private readonly HelpBoard _helpBoard;
         private readonly ScoreBoard _scoreBoard;
         private bool _isGameActive;
 
-        public MainScreen(TerminalIO io,
+        public GameScreen(TerminalIO io,
             HelpBoard helpBoard,
             ScoreBoard scoreBoard,
             Glass glass) : base(io)
