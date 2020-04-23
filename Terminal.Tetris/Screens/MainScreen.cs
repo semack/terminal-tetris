@@ -39,54 +39,57 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult(result);
         }
 
-        private async Task InitKeyHandlerAsync(object state)
+        private async Task InitKeyHandlerAsync(CancellationToken cancellationToken)
         {
-            var cancellationToken = (CancellationToken) state;
-            while (_isGameActive && !cancellationToken.IsCancellationRequested)
+            ThreadPool.QueueUserWorkItem(async state =>
             {
-                var playerAction = PlayerActionEnum.None;
+                while (_isGameActive && !cancellationToken.IsCancellationRequested)
+                {
+                    var playerAction = PlayerActionEnum.None;
 
-                var key = await IO.GetKeyAsync(cancellationToken);
-                if (key == null) continue;
+                    var key = await IO.GetKeyAsync(cancellationToken);
+                    if (key == null) continue;
 
-                if (key == 3) // Ctrl+C - terminate program
-                    await IO.Terminate(cancellationToken);
-                else if (key == 48) // 0 - show/hide help screen
-                    await _helpBoard.DisplayAsync(cancellationToken);
-                else if (key == 49) // 1 - show/hide next figure
-                    await _glass.DisplayNextBlockAsync(cancellationToken);
-                else if (key == 52) // 4 - next level
-                    await _scoreBoard.NextLevelAsync(cancellationToken);
-                else if (key == 55) // 7 - left 
-                    playerAction = PlayerActionEnum.Left;
-                else if (key == 57) // 9 - right 
-                    playerAction = PlayerActionEnum.Right;
-                else if (key == 56) // 8 - rotate 
-                    playerAction = PlayerActionEnum.Rotate;
-                else if (key == 53) // 5 - soft drop 
-                    playerAction = PlayerActionEnum.SoftDrop;
-                else if (key == 32) // SPACE - drop
-                    playerAction = PlayerActionEnum.Drop;
+                    if (key == 3) // Ctrl+C - terminate program
+                        await IO.Terminate(cancellationToken);
+                    else if (key == 48) // 0 - show/hide help screen
+                        await _helpBoard.DisplayAsync(cancellationToken);
+                    else if (key == 49) // 1 - show/hide next figure
+                        await _glass.DisplayNextBlockAsync(cancellationToken);
+                    else if (key == 52) // 4 - next level
+                        await _scoreBoard.NextLevelAsync(cancellationToken);
+                    else if (key == 55) // 7 - left 
+                        playerAction = PlayerActionEnum.Left;
+                    else if (key == 57) // 9 - right 
+                        playerAction = PlayerActionEnum.Right;
+                    else if (key == 56) // 8 - rotate 
+                        playerAction = PlayerActionEnum.Rotate;
+                    else if (key == 53) // 5 - soft drop 
+                        playerAction = PlayerActionEnum.SoftDrop;
+                    else if (key == 32) // SPACE - drop
+                        playerAction = PlayerActionEnum.Drop;
 
-                if (playerAction != PlayerActionEnum.None)
-                    await _glass.TickAsync(playerAction, cancellationToken);
-            }
+                    if (playerAction != PlayerActionEnum.None)
+                        await _glass.TickAsync(playerAction, cancellationToken);
+                }
+            }, cancellationToken);
+            
+            await Task.CompletedTask;
         }
 
         public async Task<LetterBoardItem> PlayGameAsync(short playerLevel,
             CancellationToken cancellationToken = default)
         {
-            _isGameActive = true;
-
             await IO.ClearAsync(cancellationToken);
+            
             await _helpBoard.DisplayAsync(cancellationToken);
             await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
             await _glass.RunAsync(cancellationToken);
+            
+            await InitKeyHandlerAsync(cancellationToken);
 
-            // init key polling background loop
-            ThreadPool.QueueUserWorkItem(async state => await InitKeyHandlerAsync(state),
-                cancellationToken);
-
+            _isGameActive = true;
+            
             // main loop
             while (_isGameActive && !cancellationToken.IsCancellationRequested)
             {
