@@ -14,7 +14,4 @@
     <PackageReference Include="Terminal" Version="0.2.0" />
     <PackageReference Include="Terminal.Extensions" Version="0.2.0" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Terminal.Game.Framework\Terminal.Game.Framework.csproj" />
-  </ItemGroup>
 </Project>

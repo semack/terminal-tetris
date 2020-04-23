@@ -39,6 +39,7 @@ namespace Terminal.Tetris.Components
 
         public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken)
         {
+            await Task.CompletedTask;
         }
     }
 }
