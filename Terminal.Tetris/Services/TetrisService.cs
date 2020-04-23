@@ -8,15 +8,15 @@ using Terminal.Tetris.IO;
 using Terminal.Tetris.Resources;
 using Terminal.Tetris.Screens;
 
-namespace Terminal.Tetris
+namespace Terminal.Tetris.Services
 {
-    public class Tetris : BaseComponent, IHostedService
+    public class TetrisService : BaseComponent, IHostedService
     {
         private readonly MainScreen _mainScreen;
         private readonly LetterBoardScreen _scoresScreen;
         private readonly SplashScreen _splashScreen;
 
-        public Tetris(TerminalIO io,
+        public TetrisService(TerminalIO io,
             SplashScreen splashScreen,
             MainScreen mainScreen,
             LetterBoardScreen scoresScreen)

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Terminal.Tetris.Components;
 using Terminal.Tetris.IO;
 using Terminal.Tetris.Screens;
+using Terminal.Tetris.Services;
 
 namespace Terminal.Tetris
 {
@@ -18,7 +19,7 @@ namespace Terminal.Tetris
                 .CreateDefaultBuilder()
                 .ConfigureServices(services =>
                     {
-                        services.AddSingleton<IHostedService, Tetris>();
+                        services.AddSingleton<IHostedService, TetrisService>();
                         services.AddSingleton<TerminalIO>();
                         services.AddSingleton<SplashScreen>();
                         services.AddSingleton<LetterBoardScreen>();
