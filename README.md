@@ -5,7 +5,7 @@ This port of [Aleksey's Pajitnov](https://en.wikipedia.org/wiki/Alexey_Pajitnov)
 
 ### How it was looking (Youtube video)
 
-[![Original Tetris](https://img.youtube.com/vi/O0gAgQQHFcQ/0.jpg)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris"){:target="_blank"}
+[![Original Tetris](https://img.youtube.com/vi/O0gAgQQHFcQ/0.jpg)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
 
 ## Contribute
 Contributions are welcome. Just open an Issue or submit a PR. 
