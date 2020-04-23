@@ -43,25 +43,6 @@ namespace Terminal.Tetris.Components
             return await Task.FromResult(result);
         }
 
-        private async Task DrawGlassAsync(CancellationToken cancellationToken = default)
-        {
-            int i;
-            for (i = _y; i < _glassArray.GetUpperBound(0) + 1 + _y; i++)
-                await IO.OutAsync(_x - 2, i, Strings.GlassItem, cancellationToken);
-            await IO.OutAsync(_x - 2, i, Strings.GlassBottom1, cancellationToken);
-            await IO.OutAsync(_x - 2, i + 1, Strings.GlassBottom2, cancellationToken);
-        }
-
-        public async Task RunAsync(CancellationToken cancellationToken)
-        {
-            await DrawGlassAsync(cancellationToken);
-        }
-
-        public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken)
-        {
-            await Task.CompletedTask;
-        }
-
         public async Task DisplayNextBlockAsync(CancellationToken cancellationToken = default)
         {
             _nextFigureVisible = !_nextFigureVisible;
@@ -73,6 +54,20 @@ namespace Terminal.Tetris.Components
                 var cleanLine = new string(' ', 8);
                 for (var i = 0; i < 2; i++) await IO.OutAsync(16, 10 + i, cleanLine, cancellationToken);
             }
+        }
+        
+        public async Task DisplayAsync(CancellationToken cancellationToken)
+        {
+            int i;
+            for (i = _y; i < _glassArray.GetUpperBound(0) + 1 + _y; i++)
+                await IO.OutAsync(_x - 2, i, Strings.GlassItem, cancellationToken);
+            await IO.OutAsync(_x - 2, i, Strings.GlassBottom1, cancellationToken);
+            await IO.OutAsync(_x - 2, i + 1, Strings.GlassBottom2, cancellationToken);
+        }
+
+        public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
         }
     }
 }

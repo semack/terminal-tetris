@@ -82,7 +82,7 @@ namespace Terminal.Tetris.Screens
             
             await _helpBoard.DisplayAsync(cancellationToken);
             await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
-            await _glass.RunAsync(cancellationToken);
+            await _glass.DisplayAsync(cancellationToken);
             
             await InitKeyHandlerAsync(cancellationToken);
 
