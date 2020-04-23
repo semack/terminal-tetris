@@ -27,6 +27,14 @@ namespace Terminal.Tetris.Services
             _scoresScreen = scoresScreen;
         }
 
+        private async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
+            if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
+                throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
+                    Constants.ScreenWidth, Constants.ScreenHeight));
+        }
+        
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             await InitializeAsync(cancellationToken);
@@ -48,14 +56,6 @@ namespace Terminal.Tetris.Services
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await IO.OutAsync(0, 24, Strings.GameCopyright, cancellationToken);
-        }
-
-        private async Task InitializeAsync(CancellationToken cancellationToken = default)
-        {
-            var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
-            if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
-                throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
-                    Constants.ScreenWidth, Constants.ScreenHeight));
         }
     }
 }
