@@ -28,7 +28,7 @@ namespace Terminal.Tetris.Screens
             _glass = glass;
         }
 
-        private int LoopDelay => Math.Abs(Constants.LevelSpeedMultiplier / (_scoreBoard.Level + 1));
+        private int LoopDelay => Constants.LevelSpeedMultiplier * (10 - _scoreBoard.Level);
 
         private async Task<string> ReadPlayerNameAsync(CancellationToken cancellationToken = default)
         {
