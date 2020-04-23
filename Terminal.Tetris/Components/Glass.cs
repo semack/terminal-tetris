@@ -11,12 +11,6 @@ namespace Terminal.Tetris.Components
 {
     public class Glass : BaseComponent
     {
-        private Block _block;
-        private readonly short[,] _glassArray = new short[20, 20];
-        private readonly int _x;
-        private readonly int _y;
-
-        
         private static readonly IList<short[,]> _masks = new List<short[,]>(new[]
         {
             new short[,] {{1, 1, 1, 1}},
@@ -28,7 +22,19 @@ namespace Terminal.Tetris.Components
             new short[,] {{7, 7, 7}, {0, 7, 0}}
         });
 
+        private readonly short[,] _glassArray = new short[20, 20];
+
         private readonly Random _random = new Random();
+        private readonly int _x;
+        private readonly int _y;
+        private Block _block;
+        private bool _nextFigureVisible;
+
+        public Glass(TerminalIO io, int x, int y) : base(io)
+        {
+            _x = x;
+            _y = y;
+        }
 
         public async Task<Block> GeNextBlockAsync(CancellationToken cancellationToken)
         {
@@ -37,12 +43,6 @@ namespace Terminal.Tetris.Components
             return await Task.FromResult(result);
         }
 
-        public Glass(TerminalIO io, int x, int y) : base(io)
-        {
-            _x = x;
-            _y = y;
-        }
-        
         private async Task DrawGlassAsync(CancellationToken cancellationToken = default)
         {
             int i;
@@ -60,6 +60,19 @@ namespace Terminal.Tetris.Components
         public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
+        }
+
+        public async Task DisplayNextBlockAsync(CancellationToken cancellationToken = default)
+        {
+            _nextFigureVisible = !_nextFigureVisible;
+            if (_nextFigureVisible)
+            {
+            }
+            else
+            {
+                var cleanLine = new string(' ', 8);
+                for (var i = 0; i < 2; i++) await IO.OutAsync(16, 10 + i, cleanLine, cancellationToken);
+            }
         }
     }
 }

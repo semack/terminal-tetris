@@ -25,7 +25,7 @@ namespace Terminal.Tetris.Resources
         public const string MoveLeft = "7: НAЛEBO";
         public const string MoveRight = "9: НAПPABO";
         public const string Rotate = "8:ПOBOPOТ";
-        public const string SpeedUp = "4:УCКOPИТЬ";
+        public const string NextLevel = "4:УCКOPИТЬ";
         public const string SoftDrop = "5:CБPOCИТЬ";
         public const string ShowNext = "1: ПOКAЗAТЬ  CЛEДУЮЩУЮ";
         public const string ClearHelp = "0:  CТEPEТЬ ЭТOТ ТEКCТ";

@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.IO;
+using Terminal.Tetris.Models;
 using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Components
@@ -55,11 +56,24 @@ namespace Terminal.Tetris.Components
             await InvalidateAsync(cancellationToken);
         }
 
-        public async Task SpeedUpAsync(CancellationToken cancellationToken)
+        public async Task NextLevelAsync(CancellationToken cancellationToken)
         {
             if (Level < 9)
                 Level++;
             await InvalidateAsync(cancellationToken);
+        }
+
+        public async Task<LetterBoardItem> ToLetterBoardItemAsync(string playerName,
+            CancellationToken cancellationToken)
+        {
+            var result = new LetterBoardItem
+            {
+                IsCurrentPlayer = true,
+                Score = Score,
+                Level = Level,
+                Player = playerName
+            };
+            return await Task.FromResult(result);
         }
     }
 }

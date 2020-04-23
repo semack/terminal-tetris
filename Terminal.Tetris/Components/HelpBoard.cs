@@ -6,11 +6,11 @@ using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Components
 {
-    public class HelpMessage : BaseComponent
+    public class HelpBoard : BaseComponent
     {
         private bool _visible;
 
-        public HelpMessage(TerminalIO io) : base(io)
+        public HelpBoard(TerminalIO io) : base(io)
         {
         }
 
@@ -22,7 +22,7 @@ namespace Terminal.Tetris.Components
                 await IO.OutAsync(52, 2, Strings.MoveLeft, cancellationToken);
                 await IO.OutAsync(64, 2, Strings.MoveRight, cancellationToken);
                 await IO.OutAsync(57, 3, Strings.Rotate, cancellationToken);
-                await IO.OutAsync(52, 4, Strings.SpeedUp, cancellationToken);
+                await IO.OutAsync(52, 4, Strings.NextLevel, cancellationToken);
                 await IO.OutAsync(64, 4, Strings.SoftDrop, cancellationToken);
                 await IO.OutAsync(52, 5, Strings.ShowNext, cancellationToken);
                 await IO.OutAsync(52, 6, Strings.ClearHelp, cancellationToken);

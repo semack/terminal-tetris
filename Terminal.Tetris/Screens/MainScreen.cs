@@ -16,15 +16,17 @@ namespace Terminal.Tetris.Screens
         //private readonly PlayerScoresItem _scores;
 
         private readonly Glass _glass;
-        private readonly HelpMessage _helpMessage;
+        private readonly HelpBoard _helpBoard;
         private readonly ScoreBoard _scoreBoard;
         private bool _isGameActive;
-        private bool _nextFigureVisible;
 
-        public MainScreen(TerminalIO io, HelpMessage helpMessage, ScoreBoard scoreBoard, Glass glass) : base(io)
+        public MainScreen(TerminalIO io,
+            HelpBoard helpBoard,
+            ScoreBoard scoreBoard,
+            Glass glass) : base(io)
         {
             _scoreBoard = scoreBoard;
-            _helpMessage = helpMessage;
+            _helpBoard = helpBoard;
             _glass = glass;
         }
 
@@ -37,64 +39,53 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult(result);
         }
 
-        private async Task DisplayNextFigureAsync(CancellationToken cancellationToken = default)
+        private async Task InitKeyHandlerAsync(object state)
         {
-            _nextFigureVisible = !_nextFigureVisible;
-            if (_nextFigureVisible)
+            var cancellationToken = (CancellationToken) state;
+            while (_isGameActive && !cancellationToken.IsCancellationRequested)
             {
-            }
-            else
-            {
-                var cleanLine = new string(' ', 8);
-                for (var i = 0; i < 2; i++) await IO.OutAsync(16, 10 + i, cleanLine, cancellationToken);
+                var playerAction = PlayerActionEnum.None;
+
+                var key = await IO.GetKeyAsync(cancellationToken);
+                if (key == null) continue;
+
+                if (key == 3) // Ctrl+C - terminate program
+                    await IO.Terminate(cancellationToken);
+                else if (key == 48) // 0 - show/hide help screen
+                    await _helpBoard.DisplayAsync(cancellationToken);
+                else if (key == 49) // 1 - show/hide next figure
+                    await _glass.DisplayNextBlockAsync(cancellationToken);
+                else if (key == 52) // 4 - next level
+                    await _scoreBoard.NextLevelAsync(cancellationToken);
+                else if (key == 55) // 7 - left 
+                    playerAction = PlayerActionEnum.Left;
+                else if (key == 57) // 9 - right 
+                    playerAction = PlayerActionEnum.Right;
+                else if (key == 56) // 8 - rotate 
+                    playerAction = PlayerActionEnum.Rotate;
+                else if (key == 53) // 5 - soft drop 
+                    playerAction = PlayerActionEnum.SoftDrop;
+                else if (key == 32) // SPACE - drop
+                    playerAction = PlayerActionEnum.Drop;
+
+                if (playerAction != PlayerActionEnum.None)
+                    await _glass.TickAsync(playerAction, cancellationToken);
             }
         }
-
 
         public async Task<LetterBoardItem> PlayGameAsync(short playerLevel,
             CancellationToken cancellationToken = default)
         {
             _isGameActive = true;
 
-
             await IO.ClearAsync(cancellationToken);
-            await _helpMessage.DisplayAsync(cancellationToken);
-
+            await _helpBoard.DisplayAsync(cancellationToken);
             await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
             await _glass.RunAsync(cancellationToken);
 
-            // key polling background loop
-            ThreadPool.QueueUserWorkItem(async state =>
-            {
-                while (_isGameActive && !cancellationToken.IsCancellationRequested)
-                {
-                    var playerAction = PlayerActionEnum.None;
-                    var key = await IO.GetKeyAsync(cancellationToken);
-                    if (key == null) continue;
-
-                    if (key == 3) // Ctrl+C - terminate program
-                        await IO.Terminate(cancellationToken);
-                    else if (key == 48) // 0 - show/hide help screen
-                        await _helpMessage.DisplayAsync(cancellationToken);
-                    else if (key == 49) // 1 - show next figure
-                        await DisplayNextFigureAsync(cancellationToken);
-                    else if (key == 52) // 4 - speed up
-                        await _scoreBoard.SpeedUpAsync(cancellationToken);
-                    else if (key == 55) // 7 - left 
-                        playerAction = PlayerActionEnum.Left;
-                    else if (key == 57) // 9 - right 
-                        playerAction = PlayerActionEnum.Right;
-                    else if (key == 56) // 8 - rotate 
-                        playerAction = PlayerActionEnum.Rotate;
-                    else if (key == 53) // 5 - soft drop 
-                        playerAction = PlayerActionEnum.SoftDrop;
-                    else if (key == 32) // SPACE - drop
-                        playerAction = PlayerActionEnum.Drop;
-
-                    if (playerAction != PlayerActionEnum.None)
-                        await _glass.TickAsync(playerAction, cancellationToken);
-                }
-            }, cancellationToken);
+            // init key polling background loop
+            ThreadPool.QueueUserWorkItem(async state => await InitKeyHandlerAsync(state),
+                cancellationToken);
 
             // main loop
             while (_isGameActive && !cancellationToken.IsCancellationRequested)
@@ -103,13 +94,8 @@ namespace Terminal.Tetris.Screens
                 await Task.Delay(LoopDelay, cancellationToken);
             }
 
-            var result = new LetterBoardItem
-            {
-                IsCurrentPlayer = true,
-                Score = _scoreBoard.Score,
-                Level = _scoreBoard.Level,
-                Player = await ReadPlayerNameAsync(cancellationToken)
-            };
+            var playerName = await ReadPlayerNameAsync(cancellationToken);
+            var result = await _scoreBoard.ToLetterBoardItemAsync(playerName, cancellationToken);
             return await Task.FromResult(result);
         }
     }
