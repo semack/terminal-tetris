@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Terminal.Tetris.Common
+namespace Terminal.Tetris.Components
 {
     public class Block
     {

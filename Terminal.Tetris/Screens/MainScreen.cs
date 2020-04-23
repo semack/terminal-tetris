@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
+using Terminal.Tetris.Components;
 using Terminal.Tetris.Definitions;
 using Terminal.Tetris.Enums;
 using Terminal.Tetris.IO;
@@ -12,20 +13,22 @@ namespace Terminal.Tetris.Screens
 {
     public class MainScreen : BaseComponent
     {
-        private readonly PlayerScoresItem _scores;
+        //private readonly PlayerScoresItem _scores;
 
         private readonly Glass _glass;
-        private bool _helpVisible;
         private bool _isGameActive;
         private bool _nextFigureVisible;
+        private readonly HelpMessage _helpMessage;
+        private readonly ScoreBoard _scoreBoard;
 
-        public MainScreen(TerminalIO io) : base(io)
+        public MainScreen(TerminalIO io, HelpMessage helpMessage, ScoreBoard scoreBoard, Glass glass) : base(io)
         {
-            _scores = new PlayerScoresItem();
-            _glass = new Glass(io, 27, 1);
+            _scoreBoard = scoreBoard;
+            _helpMessage = helpMessage;
+            _glass = glass;
         }
 
-        private int LoopDelay => Math.Abs(Constants.LevelSpeedMultiplier / (_scores.Level + 1));
+        private int LoopDelay => Math.Abs(Constants.LevelSpeedMultiplier / (_scoreBoard.Level + 1));
 
         private async Task<string> ReadPlayerNameAsync(CancellationToken cancellationToken = default)
         {
@@ -34,31 +37,10 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult(result);
         }
 
-        private async Task DisplayHelpAsync(CancellationToken cancellationToken = default)
-        {
-            _helpVisible = !_helpVisible;
-            if (_helpVisible)
-            {
-                await IO.OutAsync(52, 2, Strings.MoveLeft, cancellationToken);
-                await IO.OutAsync(64, 2, Strings.MoveRight, cancellationToken);
-                await IO.OutAsync(57, 3, Strings.Rotate, cancellationToken);
-                await IO.OutAsync(52, 4, Strings.SpeedUp, cancellationToken);
-                await IO.OutAsync(64, 4, Strings.SoftDrop, cancellationToken);
-                await IO.OutAsync(52, 5, Strings.ShowNext, cancellationToken);
-                await IO.OutAsync(52, 6, Strings.ClearHelp, cancellationToken);
-                await IO.OutAsync(54, 7, Strings.Drop, cancellationToken);
-            }
-            else
-            {
-                var cleanLine = new string(' ', 25);
-                for (var i = 0; i < 6; i++) await IO.OutAsync(52, 2 + i, cleanLine, cancellationToken);
-            }
-        }
-
         private async Task DisplayNextFigureAsync(CancellationToken cancellationToken = default)
         {
             _nextFigureVisible = !_nextFigureVisible;
-            if (_helpVisible)
+            if (_nextFigureVisible)
             {
             }
             else
@@ -68,28 +50,17 @@ namespace Terminal.Tetris.Screens
             }
         }
 
-        private async Task DisplayScoresAsync(CancellationToken cancellationToken = default)
-        {
-            await IO.OutAsync(0, 1, $"{Strings.LinesCount}:", cancellationToken);
-            await IO.OutAsync(13, 1, 3, _scores.Lines.ToString(), cancellationToken);
-            await IO.OutAsync(0, 2, $"{Strings.Level}:", cancellationToken);
-            await IO.OutAsync(13, 2, 3, _scores.Level.ToString(), cancellationToken);
-            await IO.OutAsync(2, 3, $"{Strings.Score}:", cancellationToken);
-            await IO.OutAsync(8, 3, 5, _scores.Score.ToString(), cancellationToken);
-        }
 
         public async Task<LetterBoardItem> PlayGameAsync(short playerLevel,
             CancellationToken cancellationToken = default)
         {
-            _scores.Level = playerLevel;
-            _scores.Lines = 0;
-            _scores.Score = 0;
             _isGameActive = true;
 
 
             await IO.ClearAsync(cancellationToken);
-            await DisplayHelpAsync(cancellationToken);
-            await DisplayScoresAsync(cancellationToken);
+            await _helpMessage.DisplayAsync(cancellationToken);
+
+            await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
             await _glass.RunAsync(cancellationToken);
 
             // key polling background loop
@@ -104,11 +75,11 @@ namespace Terminal.Tetris.Screens
                     if (key == 3) // Ctrl+C - terminate program
                         await IO.Terminate(cancellationToken);
                     else if (key == 48) // 0 - show/hide help screen
-                        await DisplayHelpAsync(cancellationToken);
+                        await _helpMessage.DisplayAsync(cancellationToken);
                     else if (key == 49) // 1 - show next figure
                         await DisplayNextFigureAsync(cancellationToken);
                     else if (key == 52) // 4 - speed up
-                        await SpeedUpAsync(cancellationToken);
+                        await _scoreBoard.SpeedUpAsync(cancellationToken);
                     else if (key == 55) // 7 - left 
                         playerAction = PlayerActionEnum.Left;
                     else if (key == 57) // 9 - right 
@@ -135,20 +106,11 @@ namespace Terminal.Tetris.Screens
             var result = new LetterBoardItem
             {
                 IsCurrentPlayer = true,
-                Score = _scores.Score,
-                Level = _scores.Level,
+                Score = _scoreBoard.Score,
+                Level = _scoreBoard.Level,
                 Player = await ReadPlayerNameAsync(cancellationToken)
             };
             return await Task.FromResult(result);
-        }
-
-        private async Task SpeedUpAsync(CancellationToken cancellationToken)
-        {
-            if (_scores.Level < 9)
-            {
-                _scores.Level++;
-                await DisplayScoresAsync(cancellationToken);
-            }
         }
     }
 }

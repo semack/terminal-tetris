@@ -1,10 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Terminal.Tetris.Common;
 using Terminal.Tetris.Enums;
 using Terminal.Tetris.IO;
 using Terminal.Tetris.Resources;
 
-namespace Terminal.Tetris.Common
+namespace Terminal.Tetris.Components
 {
     public class Glass  : BaseComponent
     {

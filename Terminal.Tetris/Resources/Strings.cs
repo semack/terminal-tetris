@@ -34,8 +34,8 @@ namespace Terminal.Tetris.Resources
         public const string GlassBottom1 = "<!====================!>";
         public const string GlassBottom2 = @"  \/\/\/\/\/\/\/\/\/\/  ";
 
-        public const string GameCopyright = "TETRIS (c) 1984 by Alexey Pajitnov.\r\n\r\n" +
+        public const string GameCopyright = "\r\nTETRIS (c) 1984 by Alexey Pajitnov.\r\n\r\n" +
                                             "The game has been ported to .NET Core platform by Andriy S\'omak, 2020.\r\n" +
-                                            "Homepage url: https://github.com/semack/terminal-tetris/";
+                                            "Homepage url: https://github.com/semack/terminal-tetris/\r\n";
     }
 }

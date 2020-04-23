@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.Definitions;
 using Terminal.Tetris.IO;
@@ -9,11 +10,21 @@ using Terminal.Tetris.Screens;
 
 namespace Terminal.Tetris
 {
-    public class Tetris : BaseComponent
+    public class Tetris : BaseComponent, IHostedService
     {
-        public Tetris(TerminalIO io)
+        private readonly SplashScreen _splashScreen;
+        private readonly MainScreen _mainScreen;
+        private readonly LetterBoardScreen _scoresScreen;
+
+        public Tetris(TerminalIO io, 
+            SplashScreen splashScreen, 
+            MainScreen mainScreen, 
+            LetterBoardScreen scoresScreen)
             : base(io)
         {
+            _splashScreen = splashScreen;
+            _mainScreen = mainScreen;
+            _scoresScreen = scoresScreen;
         }
 
         private async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -24,28 +35,27 @@ namespace Terminal.Tetris
                     Constants.ScreenWidth, Constants.ScreenHeight));
         }
 
-        public async Task RunAsync(CancellationToken cancellationToken = default)
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            await IO.OutAsync(Strings.GameCopyright, cancellationToken);
-
             await InitializeAsync(cancellationToken);
-
-            var splashScreen = new SplashScreen(IO);
-            var mainScreen = new MainScreen(IO);
-            var scoresScreen = new ScoresScreen(IO);
-
+            
             ThreadPool.QueueUserWorkItem(async state =>
             {
                 var playAgain = true;
                 while (playAgain && !cancellationToken.IsCancellationRequested)
                 {
-                    var playerLevel = await splashScreen.GetPlayerLevelAsync(cancellationToken);
-                    var scores = await mainScreen.PlayGameAsync(playerLevel, cancellationToken);
-                    playAgain = await scoresScreen.ShowLetterBoardAsync(scores, cancellationToken);
+                    var playerLevel = await _splashScreen.GetPlayerLevelAsync(cancellationToken);
+                    var scores = await _mainScreen.PlayGameAsync(playerLevel, cancellationToken);
+                    playAgain = await _scoresScreen.ShowLetterBoardAsync(scores, cancellationToken);
                 }
 
                 System.Terminal.GenerateBreakSignal(TerminalBreakSignal.Quit);
             }, cancellationToken);
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await IO.OutAsync(0, 24, Strings.GameCopyright, cancellationToken);
         }
     }
 }

@@ -13,11 +13,11 @@ using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
-    public class ScoresScreen : BaseComponent
+    public class LetterBoardScreen : BaseComponent
     {
         private IList<LetterBoardItem> _letterBoard;
 
-        public ScoresScreen(TerminalIO io) : base(io)
+        public LetterBoardScreen(TerminalIO io) : base(io)
         {
             _letterBoard = new List<LetterBoardItem>();
         }

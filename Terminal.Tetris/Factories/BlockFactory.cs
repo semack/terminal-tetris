@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Terminal.Tetris.Components;
 
-namespace Terminal.Tetris.Common
+namespace Terminal.Tetris.Factories
 {
     public class BlockFactory
     {
