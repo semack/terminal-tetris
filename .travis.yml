@@ -6,4 +6,4 @@ dotnet: 3.1
 install:
  - dotnet restore 
 script:
- - dotnet build  --configuration release --version-suffix .$TRAVIS_BUILD_NUMBER
+ - dotnet build
