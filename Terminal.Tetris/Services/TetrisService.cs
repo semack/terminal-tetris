@@ -13,7 +13,7 @@ namespace Terminal.Tetris.Services
     public class TetrisService : BaseComponent, IHostedService
     {
         private readonly GameScreen _gameScreen;
-        private readonly LetterBoardScreen _LetterBoardScreen;
+        private readonly LetterBoardScreen _letterBoardScreen;
         private readonly SplashScreen _splashScreen;
 
         public TetrisService(TerminalIO io,
@@ -24,7 +24,7 @@ namespace Terminal.Tetris.Services
         {
             _splashScreen = splashScreen;
             _gameScreen = gameScreen;
-            _LetterBoardScreen = letterBoardScreen;
+            _letterBoardScreen = letterBoardScreen;
         }
 
         private async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -46,7 +46,7 @@ namespace Terminal.Tetris.Services
                 {
                     var playerLevel = await _splashScreen.GetPlayerLevelAsync(cancellationToken);
                     var scores = await _gameScreen.PlayGameAsync(playerLevel, cancellationToken);
-                    playAgain = await _LetterBoardScreen.ShowLetterBoardAsync(scores, cancellationToken);
+                    playAgain = await _letterBoardScreen.ShowLetterBoardAsync(scores, cancellationToken);
                 }
 
                 await IO.TerminateAsync(cancellationToken);
