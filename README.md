@@ -5,7 +5,7 @@ This port of [Aleksey's Pajitnov](https://en.wikipedia.org/wiki/Alexey_Pajitnov)
 
 ### How it was looking ([youtube video](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris"))
 
-[![Original Tetris](https://img.youtube.com/vi/O0gAgQQHFcQ/0.jpg)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
+[![Original Tetris](https://upload.wikimedia.org/wikipedia/en/7/7c/Tetris-VeryFirstVersion.png)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
 
 <!--## Demo
 Play the demo of the game by typing this command in the terminal:
