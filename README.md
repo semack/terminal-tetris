@@ -3,7 +3,7 @@ The multi-platform TETRIS game designed for text terminals.
 
 This port of [Aleksey's Pajitnov](https://en.wikipedia.org/wiki/Alexey_Pajitnov) original TETRIS version has been created on my inspiration from my childhood time and experience playing it on  [DVK-3M](http://www.leningrad.su/museum/show_calc.php?n=241&lang=0&test=0) (soviet [PDP-11](https://en.wikipedia.org/wiki/PDP-11) clone) in the eighties.
 
-### How it was looking (Youtube video)
+### How it was looking ([youtube video](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris"))
 
 [![Original Tetris](https://img.youtube.com/vi/O0gAgQQHFcQ/0.jpg)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
 
