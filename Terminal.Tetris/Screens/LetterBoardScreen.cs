@@ -22,7 +22,7 @@ namespace Terminal.Tetris.Screens
             _letterBoard = new List<LetterBoardItem>();
         }
 
-        public async Task<bool> ShowLetterBoardAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken)
+        public async Task<bool> ShowLetterBoardAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken = default)
         {
             await UpdateScoresAsync(scoresItem, cancellationToken);
             bool? playAgain = null;
@@ -35,7 +35,7 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult((bool) playAgain);
         }
 
-        private async Task UpdateScoresAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken)
+        private async Task UpdateScoresAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken = default)
         {
             // init serializer
             var options = new JsonSerializerOptions

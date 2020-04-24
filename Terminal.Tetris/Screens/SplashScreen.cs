@@ -36,13 +36,9 @@ namespace Terminal.Tetris.Screens
         private async Task<short?> InputLevelAsync(CancellationToken cancellationToken = default)
         {
             short? result = null;
-
             var input = await IO.ReadLineAsync(cancellationToken);
-
             if (!short.TryParse(input, out var level)) return await Task.FromResult((short?) null);
-
             if (level >= 0 || level <= 9) result = level;
-
             return await Task.FromResult(result);
         }
     }

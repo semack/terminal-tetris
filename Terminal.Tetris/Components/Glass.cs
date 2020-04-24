@@ -30,13 +30,13 @@ namespace Terminal.Tetris.Components
         private Block _block;
         private bool _nextFigureVisible;
 
-        public Glass(TerminalIO io, int x, int y) : base(io)
+        public Glass(TerminalIO io) : base(io)
         {
-            _x = x;
-            _y = y;
+            _x = 27;
+            _y = 1;
         }
 
-        public async Task<Block> GeNextBlockAsync(CancellationToken cancellationToken)
+        public async Task<Block> GeNextBlockAsync(CancellationToken cancellationToken = default)
         {
             var index = _random.Next(_masks.Count - 1);
             var result = new Block(_masks[index]);
@@ -56,7 +56,7 @@ namespace Terminal.Tetris.Components
             }
         }
         
-        public async Task DisplayAsync(CancellationToken cancellationToken)
+        public async Task DisplayAsync(CancellationToken cancellationToken = default)
         {
             int i;
             for (i = _y; i < _glassArray.GetUpperBound(0) + 1 + _y; i++)
@@ -65,7 +65,7 @@ namespace Terminal.Tetris.Components
             await IO.OutAsync(_x - 2, i + 1, Strings.GlassBottom2, cancellationToken);
         }
 
-        public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken)
+        public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken = default)
         {
             await IO.OutAsync(0, 10, action.ToString(), cancellationToken);
             await Task.CompletedTask;

@@ -33,7 +33,7 @@ namespace Terminal.Tetris.Components
             }
         }
 
-        public async Task<Block> RotateAsync(CancellationToken cancellationToken)
+        public async Task<Block> RotateAsync(CancellationToken cancellationToken = default)
         {
             var rotated = new short[Width, Height];
             for (var i = 0; i < Height; i++)

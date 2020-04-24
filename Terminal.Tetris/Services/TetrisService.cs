@@ -53,7 +53,7 @@ namespace Terminal.Tetris.Services
             }, cancellationToken);
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             await IO.OutAsync(0, 24, Strings.GameCopyright, cancellationToken);
         }

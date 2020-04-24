@@ -37,7 +37,7 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult(result);
         }
 
-        private async Task InitKeyHandlerAsync(CancellationToken cancellationToken)
+        private async Task InitKeyHandlerAsync(CancellationToken cancellationToken = default)
         {
             ThreadPool.QueueUserWorkItem(async state =>
             {

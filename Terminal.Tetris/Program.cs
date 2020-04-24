@@ -26,7 +26,7 @@ namespace Terminal.Tetris
                         services.AddTransient<GameScreen>();
                         services.AddTransient<HelpBoard>();
                         services.AddTransient<ScoreBoard>();
-                        services.AddTransient(x => new Glass(x.GetRequiredService<TerminalIO>(), 27, 1));
+                        services.AddTransient<Glass>();
                     }
                 )
                 .RunTerminalAsync(options =>

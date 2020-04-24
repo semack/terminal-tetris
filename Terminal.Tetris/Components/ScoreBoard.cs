@@ -56,7 +56,7 @@ namespace Terminal.Tetris.Components
             await InvalidateAsync(cancellationToken);
         }
 
-        public async Task NextLevelAsync(CancellationToken cancellationToken)
+        public async Task NextLevelAsync(CancellationToken cancellationToken = default)
         {
             if (Level < 9)
                 Level++;
@@ -64,7 +64,7 @@ namespace Terminal.Tetris.Components
         }
 
         public async Task<LetterBoardItem> ToLetterBoardItemAsync(string playerName,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var result = new LetterBoardItem
             {
