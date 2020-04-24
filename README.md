@@ -7,6 +7,12 @@ This port of [Aleksey's Pajitnov](https://en.wikipedia.org/wiki/Alexey_Pajitnov)
 
 [![Original Tetris](https://img.youtube.com/vi/O0gAgQQHFcQ/0.jpg)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
 
+<!--## Demo
+Play the demo of the game by typing this command in the terminal:
+```
+ssh tetris.semack.rocks
+```-->
+
 ## License
 Please see [LICENSE.md](LICENSE.md).
 
