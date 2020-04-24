@@ -56,13 +56,13 @@ namespace Terminal.Tetris.Screens
                         await _glass.DisplayNextBlockAsync(cancellationToken);
                     else if (key == 52) // 4 - next level
                         await _scoreBoard.NextLevelAsync(cancellationToken);
-                    else if (key == 55) // 7 - left 
+                    else if (key == 55  || key == 67) // 7 - left 
                         playerAction = PlayerActionEnum.Left;
-                    else if (key == 57) // 9 - right 
+                    else if (key == 57  || key == 68) // 9 - right 
                         playerAction = PlayerActionEnum.Right;
-                    else if (key == 56) // 8 - rotate 
+                    else if (key == 56 || key == 65) // 8 - rotate 
                         playerAction = PlayerActionEnum.Rotate;
-                    else if (key == 53) // 5 - soft drop 
+                    else if (key == 53 || key == 66) // 5 - soft drop 
                         playerAction = PlayerActionEnum.SoftDrop;
                     else if (key == 32) // SPACE - drop
                         playerAction = PlayerActionEnum.Drop;
