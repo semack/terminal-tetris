@@ -49,7 +49,7 @@ namespace Terminal.Tetris.Services
                     playAgain = await _scoresScreen.ShowLetterBoardAsync(scores, cancellationToken);
                 }
 
-                System.Terminal.GenerateBreakSignal(TerminalBreakSignal.Quit);
+                await IO.TerminateAsync(cancellationToken);
             }, cancellationToken);
         }
 

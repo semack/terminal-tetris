@@ -74,7 +74,7 @@ namespace Terminal.Tetris.IO
             return await Task.FromResult(result);
         }
 
-        public async Task Terminate(CancellationToken cancellationToken = default)
+        public async Task TerminateAsync(CancellationToken cancellationToken = default)
         {
             System.Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
             await Task.CompletedTask;

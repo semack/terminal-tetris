@@ -49,7 +49,7 @@ namespace Terminal.Tetris.Screens
                     if (key == null) continue;
 
                     if (key == 3) // Ctrl+C - terminate program
-                        await IO.Terminate(cancellationToken);
+                        await IO.TerminateAsync(cancellationToken);
                     else if (key == 48) // 0 - show/hide help screen
                         await _helpBoard.DisplayAsync(cancellationToken);
                     else if (key == 49) // 1 - show/hide next figure
