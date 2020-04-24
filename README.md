@@ -7,11 +7,15 @@ This port of [Aleksey's Pajitnov](https://en.wikipedia.org/wiki/Alexey_Pajitnov)
 
 [![Original Tetris](https://img.youtube.com/vi/O0gAgQQHFcQ/0.jpg)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
 
+## License
+Please see [LICENSE.md](LICENSE.md).
+
 ## Contribute
 Contributions are welcome. Just open an Issue or submit a PR. 
 
 ## Contact
-You can reach me via my [email](mailto://semack@gmail.com)
+You can reach me via my [email](mailto://semack@gmail.com).
 
 ## Thanks
 Many thanks especially to [Alex Rønne Petersen](https://github.com/alexrp) for his great terminal [library](https://github.com/alexrp/system-terminal).
+
