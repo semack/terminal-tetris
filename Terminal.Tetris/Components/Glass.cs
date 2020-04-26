@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
+using Terminal.Tetris.Definitions;
 using Terminal.Tetris.Enums;
 using Terminal.Tetris.Extensions;
 using Terminal.Tetris.IO;
@@ -45,8 +46,7 @@ namespace Terminal.Tetris.Components
 
         private async Task GenerateNewBlockPairAsync(CancellationToken cancellationToken = default)
         {
-            if (_nextBlock == null)
-                _nextBlock = await GetNextBlockAsync(cancellationToken);
+            _nextBlock ??= await GetNextBlockAsync(cancellationToken);
             _block = _nextBlock;
             _nextBlock = await GetNextBlockAsync(cancellationToken);
         }
@@ -101,8 +101,23 @@ namespace Terminal.Tetris.Components
                 await DrawBlockAsync(cancellationToken);
                 if (_block.Y == _glassArray.GetUpperBound(1) + 1 - _block.Height)
                     await GenerateNewBlockPairAsync(cancellationToken);
+            } 
+            else if (action == PlayerActionEnum.Left)
+            {
+                if (_block.X > 0)
+                    _block.X--;
+            } 
+            else if (action == PlayerActionEnum.Right)
+            {
+                if (_block.X + _block.Width < Constants.GlassWidth)
+                    _block.X++;
             }
-            
+            else if (action == PlayerActionEnum.Rotate)
+            {
+                var rotated = await _block.RotateAsync(cancellationToken);
+                _block = rotated;
+            }
+
             await IO.OutAsync(0, 10, $"{action}       ", cancellationToken);
             await Task.CompletedTask;
         }
