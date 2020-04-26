@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Terminal.Tetris.Definitions;
 
 namespace Terminal.Tetris.Components
 {
@@ -13,8 +14,8 @@ namespace Terminal.Tetris.Components
             if (mask == null)
                 throw new ArgumentNullException(nameof(mask));
             _mask = (short[,]) mask.Clone();
-            X = Math.Abs(20 - Width / 2);
-            Y = 1;
+            X = (int)Math.Abs(Math.Ceiling((Constants.GlassWidth - Width) / 2.0));
+            Y = -1;
         }
 
         public int Height => _mask.GetUpperBound(0) + 1;
@@ -29,7 +30,7 @@ namespace Terminal.Tetris.Components
             {
                 if (x < 0 || x >= Width || y < 0 || y >= Height)
                     throw new IndexOutOfRangeException();
-                return _mask[x, y];
+                return _mask[y, x];
             }
         }
 

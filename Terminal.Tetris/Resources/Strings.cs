@@ -17,8 +17,9 @@ namespace Terminal.Tetris.Resources
         public const string Level = "УРОВЕНЬ";
         public const string Score = "СЧЕТ";
         public const string CurrentPlayer = "**";
-
-        public const string Box = "◼◼";
+        
+        public const string BlockBox = "▮▮";
+        public const string EmptyBox = " .";
 
         public const string ReadPlayerName = "BAШE ИMЯ?";
 
