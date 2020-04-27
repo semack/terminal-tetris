@@ -31,7 +31,7 @@ namespace Terminal.Tetris
                 )
                 .RunTerminalAsync(options =>
                 {
-                    options.Title = nameof(Terminal.Tetris);
+                    options.Title = nameof(Tetris);
                     options.SuppressStatusMessages = true;
                 }, cancellationTokenSource.Token);
 

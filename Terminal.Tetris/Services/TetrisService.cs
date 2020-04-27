@@ -27,14 +27,6 @@ namespace Terminal.Tetris.Services
             _letterBoardScreen = letterBoardScreen;
         }
 
-        private async Task InitializeAsync(CancellationToken cancellationToken = default)
-        {
-            var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
-            if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
-                throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
-                    Constants.ScreenWidth, Constants.ScreenHeight));
-        }
-        
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             await InitializeAsync(cancellationToken);
@@ -56,6 +48,14 @@ namespace Terminal.Tetris.Services
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             await IO.OutAsync(0, Constants.ScreenHeight, Strings.GameCopyright, cancellationToken);
+        }
+
+        private async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
+            if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
+                throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
+                    Constants.ScreenWidth, Constants.ScreenHeight));
         }
     }
 }

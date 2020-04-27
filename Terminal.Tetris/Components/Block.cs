@@ -1,11 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Terminal.Tetris.Definitions;
 
 namespace Terminal.Tetris.Components
 {
-    public class Block
+    public class Block : ICloneable
     {
         private readonly short[,] _mask;
 
@@ -14,8 +13,6 @@ namespace Terminal.Tetris.Components
             if (mask == null)
                 throw new ArgumentNullException(nameof(mask));
             _mask = (short[,]) mask.Clone();
-            X = (int)Math.Abs(Math.Ceiling((Constants.GlassWidth - Width) / 2.0));
-            Y = -1;
         }
 
         public int Height => _mask.GetUpperBound(0) + 1;
@@ -32,6 +29,15 @@ namespace Terminal.Tetris.Components
                     throw new IndexOutOfRangeException();
                 return _mask[y, x];
             }
+        }
+
+        public object Clone()
+        {
+            return new Block(_mask)
+            {
+                X = X,
+                Y = Y
+            };
         }
 
         public async Task<Block> RotateAsync(CancellationToken cancellationToken = default)

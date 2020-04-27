@@ -22,7 +22,8 @@ namespace Terminal.Tetris.Screens
             _letterBoard = new List<LetterBoardItem>();
         }
 
-        public async Task<bool> ShowLetterBoardAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken = default)
+        public async Task<bool> ShowLetterBoardAsync(LetterBoardItem scoresItem,
+            CancellationToken cancellationToken = default)
         {
             await UpdateScoresAsync(scoresItem, cancellationToken);
             bool? playAgain = null;
@@ -37,6 +38,7 @@ namespace Terminal.Tetris.Screens
 
         private async Task UpdateScoresAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken = default)
         {
+            _letterBoard.Clear();
             // init serializer
             var options = new JsonSerializerOptions
             {
@@ -46,7 +48,7 @@ namespace Terminal.Tetris.Screens
 
             //load data
             string jsonString;
-            var fileName = $"{nameof(Terminal.Tetris)}.letterBoard";
+            var fileName = $"{nameof(Tetris)}.letterBoard";
             if (File.Exists(fileName))
             {
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);

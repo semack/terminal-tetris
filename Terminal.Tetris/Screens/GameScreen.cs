@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
@@ -51,14 +50,14 @@ namespace Terminal.Tetris.Screens
                     if (key == 3) // Ctrl+C - terminate program
                         await IO.TerminateAsync(cancellationToken);
                     else if (key == 48) // 0 - show/hide help screen
-                        await _helpBoard.DisplayAsync(cancellationToken);
+                        await _helpBoard.ShowHideAsync(cancellationToken);
                     else if (key == 49) // 1 - show/hide next figure
-                        await _glass.DisplayNextBlockAsync(cancellationToken);
+                        await _glass.ShowHideNextAsync(cancellationToken);
                     else if (key == 52) // 4 - next level
                         await _scoreBoard.NextLevelAsync(cancellationToken);
-                    else if (key == 55  || key == 68) // 7 - left 
+                    else if (key == 55 || key == 68) // 7 - left 
                         playerAction = PlayerActionEnum.Left;
-                    else if (key == 57  || key == 67) // 9 - right 
+                    else if (key == 57 || key == 67) // 9 - right 
                         playerAction = PlayerActionEnum.Right;
                     else if (key == 56 || key == 65) // 8 - rotate 
                         playerAction = PlayerActionEnum.Rotate;
@@ -71,7 +70,7 @@ namespace Terminal.Tetris.Screens
                         await _glass.TickAsync(playerAction, cancellationToken);
                 }
             }, cancellationToken);
-            
+
             await Task.CompletedTask;
         }
 
@@ -79,15 +78,15 @@ namespace Terminal.Tetris.Screens
             CancellationToken cancellationToken = default)
         {
             await IO.ClearAsync(cancellationToken);
-            
-            await _helpBoard.DisplayAsync(cancellationToken);
+
+            await _helpBoard.ShowHideAsync(cancellationToken);
             await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
             await _glass.InitAsync(cancellationToken);
-            
+
             await InitKeyHandlerAsync(cancellationToken);
 
             _isGameActive = true;
-            
+
             // main loop
             while (_isGameActive && !cancellationToken.IsCancellationRequested)
             {

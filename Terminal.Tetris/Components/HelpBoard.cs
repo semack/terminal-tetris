@@ -14,7 +14,7 @@ namespace Terminal.Tetris.Components
         {
         }
 
-        public async Task DisplayAsync(CancellationToken cancellationToken = default)
+        public async Task ShowHideAsync(CancellationToken cancellationToken = default)
         {
             _visible = !_visible;
             if (_visible)
