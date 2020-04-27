@@ -12,6 +12,10 @@ namespace Terminal.Tetris.Components
 {
     public class Glass : BaseComponent
     {
+
+        public event EventHandler OnFullLine;
+        public event EventHandler OnGameFinished;
+        public event EventHandler<Block> OnNewBlock;
         private const int DeltaX = 27;
         private const int DeltaY = 1;
 
@@ -170,7 +174,13 @@ namespace Terminal.Tetris.Components
                     await RecalculateLinesAsync(cancellationToken);
                     await GenerateNewBlockPairAsync();
                     await DisplayNextBlockAsync(cancellationToken);
+                    OnNewBlock?.Invoke(this, _block);
                 }
+            }
+            else
+            {
+                if (_block.Y == 0)
+                    OnGameFinished?.Invoke(this, new EventArgs());
             }
 
             await Task.CompletedTask;
@@ -203,6 +213,7 @@ namespace Terminal.Tetris.Components
                 {
                     for (var x = 0; x <= newArray.GetUpperBound(0); x++)
                          newArray[x, yy] = 0;
+                    OnFullLine?.Invoke(this, new EventArgs());
                 }
                 else
                     yy--;

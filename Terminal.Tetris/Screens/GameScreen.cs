@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
@@ -25,6 +26,18 @@ namespace Terminal.Tetris.Screens
             _scoreBoard = scoreBoard;
             _helpBoard = helpBoard;
             _glass = glass;
+            _glass.OnFullLine += (sender, args) =>
+            {
+                _scoreBoard.Lines++;
+            };
+            _glass.OnGameFinished += (sender, args) =>
+            {
+                _isGameActive = false;
+            };
+            _glass.OnNewBlock += (sender, block) =>
+            {
+                _scoreBoard.Score += 12;
+            };
         }
 
         private int LoopDelay => Constants.LevelSpeedMultiplier * (10 - _scoreBoard.Level);
