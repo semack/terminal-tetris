@@ -113,7 +113,7 @@ namespace Terminal.Tetris.Components
             if (_block == null) // first step
             {
                 await GenerateNewBlockPairAsync();
-                block = _block;
+                block = (Block)_block.Clone();
                 await DrawGlassAsync(true, cancellationToken);
             }
             else
@@ -142,9 +142,14 @@ namespace Terminal.Tetris.Components
                         break;
                     }
                     case PlayerActionEnum.Drop:
+                        var inc = false;
                         while (CanApply(block))
+                        {
+                            inc = true;
                             block.Y++;
-                        block.Y--;
+                        }
+                        if (inc && block.Y > 0)
+                            block.Y--;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(action), action, null);
