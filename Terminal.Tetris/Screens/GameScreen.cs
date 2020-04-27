@@ -36,7 +36,7 @@ namespace Terminal.Tetris.Screens
             };
             _glass.OnNewBlock += (sender, block) =>
             {
-                _scoreBoard.Score += 12;
+                _scoreBoard.Score += 10;
             };
         }
 
