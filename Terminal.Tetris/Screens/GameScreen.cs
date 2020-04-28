@@ -17,6 +17,7 @@ namespace Terminal.Tetris.Screens
         private readonly HelpBoard _helpBoard;
         private readonly ScoreBoard _scoreBoard;
         private bool _isGameActive;
+        private int _levelSwitch;
 
         public GameScreen(TerminalIO io,
             HelpBoard helpBoard,
@@ -29,6 +30,12 @@ namespace Terminal.Tetris.Screens
             _glass.OnFullLine += (sender, args) =>
             {
                 _scoreBoard.Lines++;
+                _levelSwitch++;
+                if (_levelSwitch == Constants.LinesNextLevelSwitch)
+                {
+                    _scoreBoard.NextLevelAsync().Wait();
+                    _levelSwitch = 0;
+                }
             };
             _glass.OnGameFinished += (sender, args) =>
             {
@@ -97,7 +104,7 @@ namespace Terminal.Tetris.Screens
             await _glass.InitAsync(cancellationToken);
 
             await InitKeyHandlerAsync(cancellationToken);
-
+            _levelSwitch = 0;
             _isGameActive = true;
 
             // main loop
