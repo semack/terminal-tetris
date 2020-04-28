@@ -82,6 +82,7 @@ namespace Terminal.Tetris.Components
         public async Task InitAsync(CancellationToken cancellationToken = default)
         {
             _glassArray = new short[Constants.GlassWidth, Constants.GlassHeight];
+            _block = null;
             await Task.CompletedTask;
         }
 

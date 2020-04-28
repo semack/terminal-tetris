@@ -46,7 +46,7 @@ namespace Terminal.Tetris.IO
 
         public async Task<byte?> GetKeyAsync(CancellationToken cancellationToken = default)
         {
-            if (!System.Terminal.IsRawMode)
+            //if (!System.Terminal.IsRawMode)
             {
                 System.Terminal.SetRawMode(true, false);
 
@@ -61,7 +61,7 @@ namespace Terminal.Tetris.IO
 
         public async Task<string> ReadLineAsync(CancellationToken cancellationToken = default)
         {
-            if (System.Terminal.IsRawMode)
+            //if (System.Terminal.IsRawMode)
             {
                 System.Terminal.SetRawMode(false, false);
 
