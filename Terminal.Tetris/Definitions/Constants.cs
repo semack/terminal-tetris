@@ -8,6 +8,6 @@
         public const int LevelSpeedMultiplier = 50;
         public const int GlassWidth = 10;
         public const int GlassHeight = 20;
-        public const int LinesNextLevelSwitch = 100;
+        public const int LinesNextLevelSwitch = 50;
     }
 }
