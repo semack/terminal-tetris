@@ -8,16 +8,17 @@ namespace Terminal.Tetris.Components
 {
     public class HelpBoard : BaseComponent
     {
-        private bool _visible;
+        public bool Visible { get; private set;
+        }
 
         public HelpBoard(TerminalIO io) : base(io)
         {
         }
 
-        public async Task ShowHideAsync(CancellationToken cancellationToken = default)
+        public async Task ShowHideAsync(bool visible, CancellationToken cancellationToken = default)
         {
-            _visible = !_visible;
-            if (_visible)
+            Visible = visible;
+            if (Visible)
             {
                 await IO.OutAsync(52, 2, Strings.MoveLeft, cancellationToken);
                 await IO.OutAsync(64, 2, Strings.MoveRight, cancellationToken);

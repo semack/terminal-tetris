@@ -45,10 +45,11 @@ namespace Terminal.Tetris.IO
         }
 
         public async Task<byte?> GetKeyAsync(CancellationToken cancellationToken = default)
-        {
-            //if (!System.Terminal.IsRawMode)
+        { 
+            if (!System.Terminal.IsRawMode)
             {
-                System.Terminal.SetRawMode(true, false);
+                // System.Terminal.SetRawMode(false, false);
+                System.Terminal.SetRawMode(true, true);
 
                 System.Terminal.IsCursorVisible = false;
                 System.Terminal.IsCursorBlinking = false;
@@ -61,9 +62,9 @@ namespace Terminal.Tetris.IO
 
         public async Task<string> ReadLineAsync(CancellationToken cancellationToken = default)
         {
-            //if (System.Terminal.IsRawMode)
+            if (System.Terminal.IsRawMode)
             {
-                System.Terminal.SetRawMode(false, false);
+                System.Terminal.SetRawMode(false, true);
 
                 System.Terminal.IsCursorVisible = true;
                 System.Terminal.IsCursorBlinking = true;
