@@ -8,7 +8,7 @@ This port of [Aleksey's Pajitnov](https://en.wikipedia.org/wiki/Alexey_Pajitnov)
 [![Original Tetris](https://upload.wikimedia.org/wikipedia/en/7/7c/Tetris-VeryFirstVersion.png)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
 
 ### How it looks right now
-![Original Tetris](https://github.com/semack/terminal-tetris/blob/master/terminal-tetris-screenshot.png?raw=true)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/zQAazhcQDxw/0.jpg)](https://www.youtube.com/watch?v=zQAazhcQDxw)
 <!--## Demo
 Play the demo of the game by typing this command in the terminal:
 ```
