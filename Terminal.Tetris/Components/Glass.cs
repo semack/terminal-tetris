@@ -153,7 +153,6 @@ namespace Terminal.Tetris.Components
                     case PlayerActionEnum.Rotate:
                     {
                         block = await _block.RotateAsync(cancellationToken);
-                        //block.X = Math.Abs(Math.Ceiling());
                         break;
                     }
                     case PlayerActionEnum.Drop:
@@ -163,7 +162,6 @@ namespace Terminal.Tetris.Components
                             inc = true;
                             block.Y++;
                         }
-
                         if (inc && block.Y > 0)
                             block.Y--;
                         break;
