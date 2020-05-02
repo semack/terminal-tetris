@@ -66,6 +66,8 @@ namespace Terminal.Tetris.Components
             _nextBlock = await GetNextBlockAsync();
             _nextBlock.X = 0;
             _nextBlock.Y = (int) Math.Abs(Math.Ceiling((Constants.GlassHeight + DeltaY) / 2.0));
+            
+            OnNewBlock?.Invoke(this, _block);
         }
 
         private async Task DisplayNextBlockAsync(CancellationToken cancellationToken = default)
@@ -111,18 +113,33 @@ namespace Terminal.Tetris.Components
             }
         }
 
+        private async Task CheckStuck(Block block, 
+            CancellationToken cancellationToken = default)
+        {
+            if (BlockHasStuck(block))
+            {
+                await ApplyBlockAsync(block); 
+                await RecalculateLinesAsync(cancellationToken);
+                await GenerateNewBlockPairAsync();
+                await DisplayNextBlockAsync(cancellationToken);
+            }
+        }
+
         public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken = default)
         {
             Block block;
 
-            if (_block == null) // first step
+            if (_block == null) // init 
             {
                 await GenerateNewBlockPairAsync();
-                block = (Block)_block.Clone();
+                block = (Block)_block.Clone(); 
                 await DrawGlassAsync(true, cancellationToken);
             }
             else
             {
+                if (action == PlayerActionEnum.None && _block != null)
+                    await CheckStuck(_block, cancellationToken);
+                
                 block = (Block) _block.Clone();
                 switch (action)
                 {
@@ -167,16 +184,6 @@ namespace Terminal.Tetris.Components
 
                 await DrawGlassAsync(false, cancellationToken);
                 await DrawBlockAsync(_block, DeltaX, DeltaY, cancellationToken);
-                
-                // check for matching
-                if (BlockHasStuck(_block))
-                {
-                    await ApplyBlockAsync(_block); 
-                    await RecalculateLinesAsync(cancellationToken);
-                    await GenerateNewBlockPairAsync();
-                    await DisplayNextBlockAsync(cancellationToken);
-                    OnNewBlock?.Invoke(this, _block);
-                }
             }
             else
             {
