@@ -93,7 +93,7 @@ namespace Terminal.Tetris.Screens
             await Task.CompletedTask;
         }
 
-        public async Task<LetterBoardItem> PlayGameAsync(short playerLevel,
+        public async Task<LeaderBoardItem> PlayGameAsync(short playerLevel,
             CancellationToken cancellationToken = default)
         {
             if (!_initialized)
@@ -123,7 +123,7 @@ namespace Terminal.Tetris.Screens
             }
 
             var playerName = await ReadPlayerNameAsync(cancellationToken);
-            var result = await _scoreBoard.ToLetterBoardItemAsync(playerName, cancellationToken);
+            var result = await _scoreBoard.ToLeaderBoardItemAsync(playerName, cancellationToken);
             return await Task.FromResult(result);
         }
     }

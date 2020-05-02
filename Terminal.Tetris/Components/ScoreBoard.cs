@@ -65,10 +65,10 @@ namespace Terminal.Tetris.Components
             }
         }
 
-        public async Task<LetterBoardItem> ToLetterBoardItemAsync(string playerName,
+        public async Task<LeaderBoardItem> ToLeaderBoardItemAsync(string playerName,
             CancellationToken cancellationToken = default)
         {
-            var result = new LetterBoardItem
+            var result = new LeaderBoardItem
             {
                 IsCurrentPlayer = true,
                 Score = Score,

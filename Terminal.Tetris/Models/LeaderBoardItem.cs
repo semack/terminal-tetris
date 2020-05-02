@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Terminal.Tetris.Models
 {
-    public class LetterBoardItem
+    public class LeaderBoardItem
     {
         public string Player { get; set; }
         public short Level { get; set; }

@@ -13,16 +13,16 @@ using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
-    public class LetterBoardScreen : BaseComponent
+    public class LeaderBoardScreen : BaseComponent
     {
-        private IList<LetterBoardItem> _letterBoard;
+        private IList<LeaderBoardItem> _leaderBoard;
 
-        public LetterBoardScreen(TerminalIO io) : base(io)
+        public LeaderBoardScreen(TerminalIO io) : base(io)
         {
-            _letterBoard = new List<LetterBoardItem>();
+            _leaderBoard = new List<LeaderBoardItem>();
         }
 
-        public async Task<bool> ShowLetterBoardAsync(LetterBoardItem scoresItem,
+        public async Task<bool> ShowAsync(LeaderBoardItem scoresItem,
             CancellationToken cancellationToken = default)
         {
             await UpdateScoresAsync(scoresItem, cancellationToken);
@@ -36,9 +36,9 @@ namespace Terminal.Tetris.Screens
             return await Task.FromResult((bool) playAgain);
         }
 
-        private async Task UpdateScoresAsync(LetterBoardItem scoresItem, CancellationToken cancellationToken = default)
+        private async Task UpdateScoresAsync(LeaderBoardItem scoresItem, CancellationToken cancellationToken = default)
         {
-            _letterBoard.Clear();
+            _leaderBoard.Clear();
             // init serializer
             var options = new JsonSerializerOptions
             {
@@ -52,30 +52,30 @@ namespace Terminal.Tetris.Screens
             if (File.Exists(fileName))
             {
                 jsonString = await File.ReadAllTextAsync(fileName, cancellationToken);
-                _letterBoard = JsonSerializer.Deserialize<IList<LetterBoardItem>>(jsonString, options);
+                _leaderBoard = JsonSerializer.Deserialize<IList<LeaderBoardItem>>(jsonString, options);
             }
 
             // normalize
-            _letterBoard = _letterBoard.Where(x => x.Player != null).ToList();
+            _leaderBoard = _leaderBoard.Where(x => x.Player != null).ToList();
 
             // join actual scores
-            var item = _letterBoard.FirstOrDefault(x => x.Player.Equals(scoresItem.Player,
+            var item = _leaderBoard.FirstOrDefault(x => x.Player.Equals(scoresItem.Player,
                 StringComparison.OrdinalIgnoreCase));
 
             if (item != null)
-                _letterBoard.Remove(item);
+                _leaderBoard.Remove(item);
 
-            _letterBoard.Add(scoresItem);
+            _leaderBoard.Add(scoresItem);
 
             // taking tops
-            _letterBoard = _letterBoard
+            _leaderBoard = _leaderBoard
                 .OrderByDescending(x => x.Level)
                 .ThenByDescending(x => x.Score)
                 .Take(Constants.MaxTopPlayers)
                 .ToList();
 
             // storing back to file
-            jsonString = JsonSerializer.Serialize(_letterBoard, options);
+            jsonString = JsonSerializer.Serialize(_leaderBoard, options);
             await File.WriteAllTextAsync(fileName, jsonString, cancellationToken);
         }
 
@@ -86,7 +86,7 @@ namespace Terminal.Tetris.Screens
             await IO.OutAsync(27, 1, Strings.Level, cancellationToken);
             await IO.OutAsync(36, 1, Strings.Score, cancellationToken);
             var i = 1;
-            foreach (var item in _letterBoard)
+            foreach (var item in _leaderBoard)
             {
                 await IO.OutAsync(16, 1 + i, item.Player, cancellationToken);
                 await IO.OutAsync(27, 1 + i, 7, item.Level.ToString(), cancellationToken);

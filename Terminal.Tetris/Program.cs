@@ -22,7 +22,7 @@ namespace Terminal.Tetris
                         services.AddSingleton<IHostedService, TetrisService>();
                         services.AddSingleton<TerminalIO>();
                         services.AddTransient<SplashScreen>();
-                        services.AddTransient<LetterBoardScreen>();
+                        services.AddTransient<LeaderBoardScreen>();
                         services.AddTransient<GameScreen>();
                         services.AddTransient<HelpBoard>();
                         services.AddTransient<ScoreBoard>();
