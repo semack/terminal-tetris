@@ -8,14 +8,13 @@ namespace Terminal.Tetris.Components
 {
     public class HelpBoard : BaseComponent
     {
-        public bool Visible { get; private set;
-        }
-
         public HelpBoard(TerminalIO io) : base(io)
         {
         }
 
-        public async Task ShowHideAsync(bool visible, CancellationToken cancellationToken = default)
+        public bool Visible { get; private set; }
+
+        public async Task SetVisibleAsync(bool visible, CancellationToken cancellationToken = default)
         {
             Visible = visible;
             if (Visible)
@@ -34,6 +33,11 @@ namespace Terminal.Tetris.Components
                 var cleanLine = new string(' ', 25);
                 for (var i = 0; i < 6; i++) await IO.OutAsync(52, 2 + i, cleanLine, cancellationToken);
             }
+        }
+
+        public async Task ResetAsync(CancellationToken cancellationToken = default)
+        {
+            await SetVisibleAsync(true, cancellationToken);
         }
     }
 }

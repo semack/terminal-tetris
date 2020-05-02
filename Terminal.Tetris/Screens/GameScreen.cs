@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
@@ -16,9 +15,9 @@ namespace Terminal.Tetris.Screens
         private readonly Glass _glass;
         private readonly HelpBoard _helpBoard;
         private readonly ScoreBoard _scoreBoard;
+        private bool _initialized;
         private bool _isGameActive;
         private int _levelSwitch;
-        private bool _initialized;
 
         public GameScreen(TerminalIO io,
             HelpBoard helpBoard,
@@ -53,7 +52,7 @@ namespace Terminal.Tetris.Screens
                     if (key == 3) // Ctrl+C - terminate program
                         await IO.TerminateAsync(cancellationToken);
                     else if (key == 48) // 0 - show/hide help screen
-                        await _helpBoard.ShowHideAsync(!_helpBoard.Visible, cancellationToken);
+                        await _helpBoard.SetVisibleAsync(!_helpBoard.Visible, cancellationToken);
                     else if (key == 49) // 1 - show/hide next figure
                         await _glass.ShowHideNextAsync(cancellationToken);
                     else if (key == 52) // 4 - next level
@@ -79,20 +78,17 @@ namespace Terminal.Tetris.Screens
 
         private async Task InitializeAsync(CancellationToken cancellationToken)
         {
-            if (!_initialized)
+            _glass.OnFullLine += async (sender, args) =>
             {
-                _glass.OnFullLine += async (sender, args) =>
-                {
-                    _scoreBoard.Lines++;
-                    _levelSwitch++;
-                    if (_levelSwitch != Constants.LinesNextLevelSwitch) return;
-                    await _scoreBoard.NextLevelAsync(cancellationToken);
-                    _levelSwitch = 0;
-                };
-                _glass.OnGameFinished += (sender, args) => { _isGameActive = false; };
-                _glass.OnNewBlock += (sender, block) => { _scoreBoard.Score += 10; };
-                _initialized = true;
-            }
+                _scoreBoard.Lines++;
+                _levelSwitch++;
+                if (_levelSwitch != Constants.LinesNextLevelSwitch) return;
+                await _scoreBoard.NextLevelAsync(cancellationToken);
+            };
+            _glass.OnGameFinished += (sender, args) => { _isGameActive = false; };
+            _glass.OnNewBlock += (sender, block) => { _scoreBoard.Score += 10; };
+
+            _initialized = true;
 
             await Task.CompletedTask;
         }
@@ -100,27 +96,30 @@ namespace Terminal.Tetris.Screens
         public async Task<LetterBoardItem> PlayGameAsync(short playerLevel,
             CancellationToken cancellationToken = default)
         {
-            await InitializeAsync(cancellationToken);
-            
-            await IO.ClearAsync(cancellationToken);
-            
-            await _helpBoard.ShowHideAsync(true, cancellationToken);
-            await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
-            await _glass.InitAsync(cancellationToken);
+            if (!_initialized)
+                await InitializeAsync(cancellationToken);
 
-            _levelSwitch = 0;
-            _isGameActive = true;
+            await IO.ClearAsync(cancellationToken);
+
+            await _helpBoard.ResetAsync(cancellationToken);
+            await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
+            await _glass.ResetAsync(cancellationToken);
 
             using (var ts = new CancellationTokenSource())
             {
                 await InitKeyHandlerAsync(ts.Token);
+
+                _levelSwitch = 0;
+                _isGameActive = true;
+
                 // main loop
                 while (_isGameActive && !cancellationToken.IsCancellationRequested)
                 {
                     await _glass.TickAsync(PlayerActionEnum.None, cancellationToken);
                     await Task.Delay(LoopDelay, cancellationToken);
                 }
-                ts.Cancel(); 
+
+                ts.Cancel();
             }
 
             var playerName = await ReadPlayerNameAsync(cancellationToken);

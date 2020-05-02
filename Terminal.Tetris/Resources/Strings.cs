@@ -1,12 +1,10 @@
-using System;
-
 namespace Terminal.Tetris.Resources
 {
     public static class Strings
     {
         public const string YourLevel = "ВАШ УРОВЕНЬ? (0-9) - ";
         public const string SplashLogo = "Т Е Т Р И С";
-        public const string SplashSymbol = "▌ ▌";//" "◼ ◼";
+        public const string SplashSymbol = "▌ ▌"; //" "◼ ◼";
         public const string Yes = "ДА";
         public const string No = "НЕТ";
         public const string PlayAgain = "ЕЩЕ ПАРТИЮ? (ДА/НЕТ) - ";
@@ -19,8 +17,8 @@ namespace Terminal.Tetris.Resources
         public const string Level = "УРОВЕНЬ";
         public const string Score = "СЧЕТ";
         public const string CurrentPlayer = "**";
-   
-        public const string BlockBox =  "▌▌";
+
+        public const string BlockBox = "▌▌";
         public const string EmptyBox = " .";
 
         public const string ReadPlayerName = "BAШE ИMЯ?";

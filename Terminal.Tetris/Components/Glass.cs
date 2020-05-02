@@ -12,10 +12,6 @@ namespace Terminal.Tetris.Components
 {
     public class Glass : BaseComponent
     {
-
-        public event EventHandler OnFullLine;
-        public event EventHandler OnGameFinished;
-        public event EventHandler<Block> OnNewBlock;
         private const int DeltaX = 27;
         private const int DeltaY = 1;
 
@@ -42,6 +38,10 @@ namespace Terminal.Tetris.Components
         {
         }
 
+        public event EventHandler OnFullLine;
+        public event EventHandler OnGameFinished;
+        public event EventHandler<Block> OnNewBlock;
+
         public async Task ShowHideNextAsync(CancellationToken cancellationToken)
         {
             _showNext = !_showNext;
@@ -66,7 +66,7 @@ namespace Terminal.Tetris.Components
             _nextBlock = await GetNextBlockAsync();
             _nextBlock.X = 0;
             _nextBlock.Y = (int) Math.Abs(Math.Ceiling((Constants.GlassHeight + DeltaY) / 2.0));
-            
+
             OnNewBlock?.Invoke(this, _block);
         }
 
@@ -81,7 +81,7 @@ namespace Terminal.Tetris.Components
         }
 
 
-        public async Task InitAsync(CancellationToken cancellationToken = default)
+        public async Task ResetAsync(CancellationToken cancellationToken = default)
         {
             _glassArray = new short[Constants.GlassWidth, Constants.GlassHeight];
             _block = null;
@@ -113,33 +113,26 @@ namespace Terminal.Tetris.Components
             }
         }
 
-        private async Task CheckStuck(Block block, 
-            CancellationToken cancellationToken = default)
-        {
-            if (BlockHasStuck(block))
-            {
-                await ApplyBlockAsync(block); 
-                await RecalculateLinesAsync(cancellationToken);
-                await GenerateNewBlockPairAsync();
-                await DisplayNextBlockAsync(cancellationToken);
-            }
-        }
-
         public async Task TickAsync(PlayerActionEnum action, CancellationToken cancellationToken = default)
         {
             Block block;
 
-            if (_block == null) // init 
+            if (_block == null) // first run init 
             {
                 await GenerateNewBlockPairAsync();
-                block = (Block)_block.Clone(); 
+                block = (Block) _block.Clone();
                 await DrawGlassAsync(true, cancellationToken);
             }
             else
             {
-                if (action == PlayerActionEnum.None && _block != null)
-                    await CheckStuck(_block, cancellationToken);
-                
+                if (action == PlayerActionEnum.None && BlockHasStuck(_block)) // check stuck
+                {
+                    await ApplyBlockAsync(_block);
+                    await RecalculateLinesAsync(cancellationToken);
+                    await GenerateNewBlockPairAsync();
+                    await DisplayNextBlockAsync(cancellationToken);
+                }
+
                 block = (Block) _block.Clone();
                 switch (action)
                 {
@@ -170,6 +163,7 @@ namespace Terminal.Tetris.Components
                             inc = true;
                             block.Y++;
                         }
+
                         if (inc && block.Y > 0)
                             block.Y--;
                         break;
@@ -206,7 +200,7 @@ namespace Terminal.Tetris.Components
         {
             var newArray = new short[Constants.GlassWidth, Constants.GlassHeight];
             var yy = newArray.GetUpperBound(1);
-            
+
             for (var y = _glassArray.GetUpperBound(1); y >= 0; y--)
             {
                 var isFullLine = true;
@@ -220,11 +214,13 @@ namespace Terminal.Tetris.Components
                 if (isFullLine)
                 {
                     for (var x = 0; x <= newArray.GetUpperBound(0); x++)
-                         newArray[x, yy] = 0;
+                        newArray[x, yy] = 0;
                     OnFullLine?.Invoke(this, new EventArgs());
                 }
                 else
+                {
                     yy--;
+                }
             }
 
             _glassArray = newArray;
