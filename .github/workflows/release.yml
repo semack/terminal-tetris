@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet publish -r osx-x64 -c Release --self-contained --no-restore
+      run: dotnet publish -c Release --self-contained --no-restore
     - name: Detect Artifact name
       run: echo ::set-env name=RELEASE_ARTIFACT_NAME::$(date)
     - name: Create Release
