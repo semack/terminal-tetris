@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore 
     - name: Publish
       run: dotnet publish -r win-x64 -c Release --self-contained --no-restore &&
            dotnet publish -r linux-x64 -c Release --self-contained --no-restore &&
