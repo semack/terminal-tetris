@@ -3,12 +3,11 @@ The multi-platform [TETRIS](https://en.wikipedia.org/wiki/Tetris) game designed 
 
 This port of [Aleksey's Pajitnov](https://en.wikipedia.org/wiki/Alexey_Pajitnov) original TETRIS version has been created on my inspiration from my childhood time and experience playing it on  [DVK-3M](http://www.leningrad.su/museum/show_calc.php?n=241&lang=0&test=0) (soviet [PDP-11](https://en.wikipedia.org/wiki/PDP-11) clone) in the eighties.
 
-### How it was looking ([youtube video](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris"))
-
-[![Original Tetris](https://upload.wikimedia.org/wikipedia/en/7/7c/Tetris-VeryFirstVersion.png)](https://www.youtube.com/watch?v=O0gAgQQHFcQ "Original Tetris")
+### How it was looking
+[![Orirginal Tetris](https://img.youtube.com/vi/O0gAgQQHFcQ/0.jpg)](https://www.youtube.com/watch?v=O0gAgQQHFcQ)
 
 ### How it looks right now
-![Original Tetris](https://github.com/semack/terminal-tetris/blob/master/terminal-tetris-screenshot.png?raw=true)
+[![Terminal Tetris Reincarnation](https://img.youtube.com/vi/zQAazhcQDxw/0.jpg)](https://www.youtube.com/watch?v=zQAazhcQDxw)
 <!--## Demo
 Play the demo of the game by typing this command in the terminal:
 ```
