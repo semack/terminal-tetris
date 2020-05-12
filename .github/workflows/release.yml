@@ -2,11 +2,8 @@ name: Release
 
 on:
   push:
-    branches: 
-      - master
-    tags: 
-      - 'v*'
-
+    branches: [ master ]
+    
 jobs:
   build:
 
@@ -14,6 +11,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Github Tag
+      uses: mathieudutour/github-tag-action@v4.2
+      with:
+        github_token: ${{ secrets.GITHUBTOKEN }}
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
