@@ -2,8 +2,12 @@ name: Release
 
 on:
   push:
-    branches: [ master ]
-    tags: 'v*'
+    branches: 
+      - master
+    tags: 
+      - 'v*'
+    branches-ignore: 
+      - development
 
 jobs:
   build:
