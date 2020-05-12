@@ -11,12 +11,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Generate build number
-      id: buildnumber
-      uses: einaregilsson/build-number@v2 
-      with:
-        token: ${{secrets.GITHUBTOKEN}}  
-        prefix: v1.0.
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -37,9 +31,10 @@ jobs:
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+        VERSION: v1.0.$GITHUB_RUN_NUMBER 
       with:
-        tag_name: ${{ steps.buildnumber.outputs.build_number }}
-        release_name: Release ${{ steps.buildnumber.outputs.build_number }}
+        tag_name: $VERSION
+        release_name: Release $VERSION
         draft: false
         prerelease: false
     - name: Upload Release Asset win-x64 
