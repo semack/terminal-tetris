@@ -46,7 +46,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: terminal-tetris-win-x64.zip
-        asset_name: Compiled binaries WIN-X64
+        asset_name: terminal-tetris-win-x64.zip
         asset_content_type: application/zip
     - name: Upload Release Asset linux-x64 
       id: upload-release-asset-linux-x64
@@ -56,7 +56,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: terminal-tetris-linux-x64.zip
-        asset_name: Compiled binaries LINUX-X64
+        asset_name: terminal-tetris-linux-x64.zip
         asset_content_type: application/zip
     - name: Upload Release Asset osx-x64 
       id: upload-release-asset-osx-64
@@ -66,5 +66,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: terminal-tetris-osx-x64.zip
-        asset_name: Compiled binaries OSX-X64
+        asset_name: terminal-tetris-osx-x64.zip
         asset_content_type: application/zip
