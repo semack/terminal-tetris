@@ -6,8 +6,6 @@ on:
       - master
     tags: 
       - 'v*'
-    branches-ignore: 
-      - development
 
 jobs:
   build:
