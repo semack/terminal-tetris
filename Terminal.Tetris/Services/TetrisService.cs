@@ -24,7 +24,7 @@ namespace Terminal.Tetris.Services
         {
             _splashScreen = splashScreen;
             _gameScreen = gameScreen;
-            _leaderBoardScreen = leaderBoardScreen;
+            _leaderBoardScreen = leaderBoardScreen; 
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
