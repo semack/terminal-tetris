@@ -31,10 +31,10 @@ jobs:
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
-        VERSION: v1.0.$GITHUB_RUN_NUMBER 
+        VERSION: v1.0.${{ github.run_number }}
       with:
-        tag_name: $VERSION
-        release_name: Release $VERSION
+        tag_name: ${{ env.VERSION }}
+        release_name: Release ${{ env.VERSION }}
         draft: false
         prerelease: false
     - name: Upload Release Asset win-x64 
