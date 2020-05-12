@@ -16,6 +16,7 @@ jobs:
       uses: einaregilsson/build-number@v2 
       with:
         token: ${{secrets.GITHUBTOKEN}}  
+        prefix: v1.0.
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -37,8 +38,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
       with:
-        tag_name: v1.0.${{ steps.buildnumber.outputs.build_number }}
-        release_name: Release v1.0.${{ github.ref }}
+        tag_name: ${{ steps.buildnumber.outputs.build_number }}
+        release_name: Release ${{ steps.buildnumber.outputs.build_number }}
         draft: false
         prerelease: false
     - name: Upload Release Asset win-x64 
