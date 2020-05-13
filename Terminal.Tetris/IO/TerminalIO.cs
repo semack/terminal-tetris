@@ -16,9 +16,7 @@ namespace Terminal.Tetris.IO
         public async Task OutAsync(int x, int y, int width, string output,
             CancellationToken cancellationToken = default)
         {
-            var xx = x;
-            //if (width > output.Length)
-            xx = x + width - output.Length;
+            var xx = x + width - output.Length;
             await OutAsync(xx, y, output, cancellationToken);
         }
 
@@ -46,17 +44,17 @@ namespace Terminal.Tetris.IO
 
         public async Task<byte?> GetKeyAsync(CancellationToken cancellationToken = default)
         {
+            System.Terminal.CursorKeyMode = TerminalKeyMode.Application;
             if (!System.Terminal.IsRawMode)
             {
-                // System.Terminal.SetRawMode(false, false);
-                System.Terminal.SetRawMode(true, true);
+                System.Terminal.SetRawMode(true, false);
 
                 System.Terminal.IsCursorVisible = false;
                 System.Terminal.IsCursorBlinking = false;
             }
 
             var key = System.Terminal.ReadRaw();
-
+            
             return await Task.FromResult(key);
         }
 
@@ -64,7 +62,7 @@ namespace Terminal.Tetris.IO
         {
             if (System.Terminal.IsRawMode)
             {
-                System.Terminal.SetRawMode(false, true);
+                System.Terminal.SetRawMode(false, false);
 
                 System.Terminal.IsCursorVisible = true;
                 System.Terminal.IsCursorBlinking = true;
@@ -75,9 +73,9 @@ namespace Terminal.Tetris.IO
             return await Task.FromResult(result);
         }
 
-        public async Task TerminateAsync(CancellationToken cancellationToken = default)
+        public async Task TerminateAsync(bool quit = false, CancellationToken cancellationToken = default)
         {
-            System.Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
+            System.Terminal.GenerateBreakSignal(quit? TerminalBreakSignal.Quit : TerminalBreakSignal.Interrupt);
             await Task.CompletedTask;
         }
     }

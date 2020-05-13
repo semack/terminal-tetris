@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,8 +14,6 @@ namespace Terminal.Tetris
     {
         private static async Task<int> Main(string[] args)
         {
-            using var cancellationTokenSource = new CancellationTokenSource();
-
             await TerminalHost
                 .CreateDefaultBuilder()
                 .ConfigureServices(services =>
@@ -33,7 +32,7 @@ namespace Terminal.Tetris
                 {
                     options.Title = nameof(Tetris);
                     options.SuppressStatusMessages = true;
-                }, cancellationTokenSource.Token);
+                });
 
             return 0;
         }

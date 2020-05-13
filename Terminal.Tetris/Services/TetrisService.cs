@@ -24,16 +24,17 @@ namespace Terminal.Tetris.Services
         {
             _splashScreen = splashScreen;
             _gameScreen = gameScreen;
-            _leaderBoardScreen = leaderBoardScreen; 
+            _leaderBoardScreen = leaderBoardScreen;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            await InitializeAsync(cancellationToken);
-
-            ThreadPool.QueueUserWorkItem(async state =>
+            try
             {
+                await InitializeAsync(cancellationToken);
+
                 var playAgain = true;
+                
                 while (playAgain && !cancellationToken.IsCancellationRequested)
                 {
                     var playerLevel = await _splashScreen.GetPlayerLevelAsync(cancellationToken);
@@ -41,13 +42,18 @@ namespace Terminal.Tetris.Services
                     playAgain = await _leaderBoardScreen.ShowAsync(scores, cancellationToken);
                 }
 
-                await IO.TerminateAsync(cancellationToken);
-            }, cancellationToken);
+                await IO.TerminateAsync(true, cancellationToken);
+            }
+            catch (OperationCanceledException)  // handling cancellation
+            {
+            }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
+            await IO.ClearAsync(cancellationToken);
             await IO.OutAsync(0, Constants.ScreenHeight, Strings.GameCopyright, cancellationToken);
+            await Task.Delay(500, cancellationToken);
         }
 
         private async Task InitializeAsync(CancellationToken cancellationToken = default)

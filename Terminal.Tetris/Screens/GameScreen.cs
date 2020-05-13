@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
@@ -50,7 +51,15 @@ namespace Terminal.Tetris.Screens
                     if (key == null) continue;
 
                     if (key == 3) // Ctrl+C - terminate program
-                        await IO.TerminateAsync(cancellationToken);
+                    {
+                        await IO.TerminateAsync(false, cancellationToken);
+                        break;
+                    } 
+                    if (key == 26) // Ctrl+Z - quit program
+                    {
+                        await IO.TerminateAsync(true, cancellationToken);
+                        break;
+                    }
                     else if (key == 48) // 0 - show/hide help screen
                         await _helpBoard.SetVisibleAsync(!_helpBoard.Visible, cancellationToken);
                     else if (key == 49) // 1 - show/hide next figure
@@ -105,21 +114,16 @@ namespace Terminal.Tetris.Screens
             await _scoreBoard.ResetAsync(playerLevel, cancellationToken);
             await _glass.ResetAsync(cancellationToken);
 
-            using (var ts = new CancellationTokenSource())
+            await InitKeyHandlerAsync(cancellationToken);
+
+            _levelSwitch = 0;
+            _isGameActive = true;
+
+            // main loop
+            while (_isGameActive)
             {
-                await InitKeyHandlerAsync(ts.Token);
-
-                _levelSwitch = 0;
-                _isGameActive = true;
-
-                // main loop
-                while (_isGameActive && !cancellationToken.IsCancellationRequested)
-                {
-                    await _glass.TickAsync(PlayerActionEnum.None, cancellationToken);
-                    await Task.Delay(LoopDelay, cancellationToken);
-                }
-
-                ts.Cancel();
+                await _glass.TickAsync(PlayerActionEnum.None, cancellationToken);
+                await Task.Delay(LoopDelay, cancellationToken);
             }
 
             var playerName = await ReadPlayerNameAsync(cancellationToken);
