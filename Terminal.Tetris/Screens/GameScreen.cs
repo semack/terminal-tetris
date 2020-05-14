@@ -18,6 +18,7 @@ namespace Terminal.Tetris.Screens
         private readonly ScoreBoard _scoreBoard;
         private bool _initialized;
         private bool _isGameActive;
+        private bool _isTerminated;
         private int _levelSwitch;
 
         public GameScreen(TerminalIO io,
@@ -50,32 +51,44 @@ namespace Terminal.Tetris.Screens
                     var key = await IO.GetKeyAsync(cancellationToken);
                     if (key == null) continue;
 
-                    if (key == 3) // Ctrl+C - terminate program
+                    if (key == 3 || key == 26) // Ctrl+C || Ctrl+Z - terminate program
                     {
-                        await IO.TerminateAsync(false, cancellationToken);
-                        break;
-                    } 
-                    if (key == 26) // Ctrl+Z - quit program
-                    {
-                        await IO.TerminateAsync(true, cancellationToken);
+                        _isTerminated = true;
                         break;
                     }
-                    else if (key == 48) // 0 - show/hide help screen
+
+                    if (key == 48) // 0 - show/hide help screen
+                    {
                         await _helpBoard.SetVisibleAsync(!_helpBoard.Visible, cancellationToken);
+                    }
                     else if (key == 49) // 1 - show/hide next figure
+                    {
                         await _glass.ShowHideNextAsync(cancellationToken);
+                    }
                     else if (key == 52) // 4 - next level
+                    {
                         await _scoreBoard.NextLevelAsync(cancellationToken);
+                    }
                     else if (key == 55 || key == 68) // 7 - left 
+                    {
                         playerAction = PlayerActionEnum.Left;
+                    }
                     else if (key == 57 || key == 67) // 9 - right 
+                    {
                         playerAction = PlayerActionEnum.Right;
+                    }
                     else if (key == 56 || key == 65) // 8 - rotate 
+                    {
                         playerAction = PlayerActionEnum.Rotate;
+                    }
                     else if (key == 53 || key == 66) // 5 - soft drop 
+                    {
                         playerAction = PlayerActionEnum.SoftDrop;
+                    }
                     else if (key == 32) // SPACE - drop
+                    {
                         playerAction = PlayerActionEnum.Drop;
+                    }
 
                     if (playerAction != PlayerActionEnum.None)
                         await _glass.TickAsync(playerAction, cancellationToken);
@@ -108,6 +121,10 @@ namespace Terminal.Tetris.Screens
             if (!_initialized)
                 await InitializeAsync(cancellationToken);
 
+            _levelSwitch = 0;
+            _isGameActive = true;
+            _isTerminated = false;
+
             await IO.ClearAsync(cancellationToken);
 
             await _helpBoard.ResetAsync(cancellationToken);
@@ -116,15 +133,15 @@ namespace Terminal.Tetris.Screens
 
             await InitKeyHandlerAsync(cancellationToken);
 
-            _levelSwitch = 0;
-            _isGameActive = true;
-
             // main loop
-            while (_isGameActive)
+            while (_isGameActive && !_isTerminated)
             {
                 await _glass.TickAsync(PlayerActionEnum.None, cancellationToken);
                 await Task.Delay(LoopDelay, cancellationToken);
             }
+
+            if (_isTerminated)
+                throw new OperationCanceledException();
 
             var playerName = await ReadPlayerNameAsync(cancellationToken);
             var result = await _scoreBoard.ToLeaderBoardItemAsync(playerName, cancellationToken);

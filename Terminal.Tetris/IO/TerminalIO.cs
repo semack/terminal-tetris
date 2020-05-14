@@ -54,7 +54,7 @@ namespace Terminal.Tetris.IO
             }
 
             var key = System.Terminal.ReadRaw();
-            
+
             return await Task.FromResult(key);
         }
 
@@ -73,9 +73,9 @@ namespace Terminal.Tetris.IO
             return await Task.FromResult(result);
         }
 
-        public async Task TerminateAsync(bool quit = false, CancellationToken cancellationToken = default)
+        public async Task TerminateAsync(CancellationToken cancellationToken = default)
         {
-            System.Terminal.GenerateBreakSignal(quit? TerminalBreakSignal.Quit : TerminalBreakSignal.Interrupt);
+            System.Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
             await Task.CompletedTask;
         }
     }

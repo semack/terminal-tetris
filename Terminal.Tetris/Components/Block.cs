@@ -46,12 +46,12 @@ namespace Terminal.Tetris.Components
             for (var i = 0; i < Height; i++)
             for (var j = 0; j < Width; j++)
                 rotated[j, Height - i - 1] = _mask[i, j];
-            
+
             var result = new Block(rotated);
-            
-            result.X = X + (int)((Width - result.Width) / 2.0);
-            result.Y = Y + (int)((Height - result.Height) / 2.0);
-            
+
+            result.X = X + (int) ((Width - result.Width) / 2.0);
+            result.Y = Y + (int) ((Height - result.Height) / 2.0);
+
             return await Task.FromResult(result);
         }
     }
