@@ -29,31 +29,36 @@ namespace Terminal.Tetris.Services
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            try
+            ThreadPool.QueueUserWorkItem(async _ =>
             {
-                await InitializeAsync(cancellationToken);
-
-                var playAgain = true;
-                
-                while (playAgain && !cancellationToken.IsCancellationRequested)
+                try
                 {
-                    var playerLevel = await _splashScreen.GetPlayerLevelAsync(cancellationToken);
-                    var scores = await _gameScreen.PlayGameAsync(playerLevel, cancellationToken);
-                    playAgain = await _leaderBoardScreen.ShowAsync(scores, cancellationToken);
-                }
+                    await InitializeAsync(cancellationToken);
 
-                await IO.TerminateAsync(true, cancellationToken);
-            }
-            catch (OperationCanceledException)  // handling cancellation
-            {
-            }
+                    var playAgain = true;
+
+                    while (playAgain)
+                    {
+                        var playerLevel = await _splashScreen.GetPlayerLevelAsync(cancellationToken);
+                        var scores = await _gameScreen.PlayGameAsync(playerLevel, cancellationToken);
+                        playAgain = await _leaderBoardScreen.ShowAsync(scores, cancellationToken);
+                    }
+
+                    await IO.TerminateAsync(cancellationToken);
+                }
+                catch (OperationCanceledException) // handling cancellation
+                {
+                    await IO.TerminateAsync(cancellationToken);
+                }
+            }, cancellationToken);
+            
+            await Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             await IO.ClearAsync(cancellationToken);
             await IO.OutAsync(0, Constants.ScreenHeight, Strings.GameCopyright, cancellationToken);
-            await Task.Delay(500, cancellationToken);
         }
 
         private async Task InitializeAsync(CancellationToken cancellationToken = default)

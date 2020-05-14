@@ -162,6 +162,7 @@ namespace Terminal.Tetris.Components
                             inc = true;
                             block.Y++;
                         }
+
                         if (inc && block.Y > 0)
                             block.Y--;
                         break;
