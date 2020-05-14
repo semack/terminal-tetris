@@ -27,13 +27,6 @@ namespace Terminal.Tetris.IO
             return Task.FromResult(output);
         }
 
-        public async Task OutAsync(string output, CancellationToken cancellationToken = default)
-        {
-            System.Terminal.Out(output);
-
-            await Task.CompletedTask;
-        }
-
         public async Task OutAsync(int x, int y, string output, CancellationToken cancellationToken = default)
         {
             System.Terminal.MoveCursorTo(x, y);

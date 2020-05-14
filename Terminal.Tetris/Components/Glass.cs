@@ -12,9 +12,6 @@ namespace Terminal.Tetris.Components
 {
     public class Glass : BaseComponent
     {
-        private const int DeltaX = 27;
-        private const int DeltaY = 1;
-
         private static readonly IList<short[,]> Masks = new List<short[,]>(new[]
         {
             new short[,] {{1, 1, 1, 1}},
@@ -65,14 +62,14 @@ namespace Terminal.Tetris.Components
 
             _nextBlock = await GetNextBlockAsync();
             _nextBlock.X = 0;
-            _nextBlock.Y = (int) Math.Abs(Math.Ceiling((Constants.GlassHeight + DeltaY) / 2.0));
+            _nextBlock.Y = (int) Math.Abs(Math.Ceiling((Constants.GlassHeight + Constants.GlassDeltaY) / 2.0));
 
             OnNewBlock?.Invoke(this, _block);
         }
 
         private async Task DisplayNextBlockAsync(CancellationToken cancellationToken = default)
         {
-            var x = DeltaX - 11;
+            var x = Constants.GlassDeltaX - 11;
             var cleanLine = new string(' ', 8);
             for (var i = 0; i <= 3; i++) await IO.OutAsync(x, _nextBlock.Y + i, cleanLine, cancellationToken);
 
@@ -93,10 +90,10 @@ namespace Terminal.Tetris.Components
             if (init)
             {
                 int i;
-                for (i = DeltaY; i < _glassArray.GetUpperBound(1) + 1 + DeltaY; i++)
-                    await IO.OutAsync(DeltaX - 2, i, Strings.GlassItem, cancellationToken);
-                await IO.OutAsync(DeltaX - 2, i, Strings.GlassBottom1, cancellationToken);
-                await IO.OutAsync(DeltaX - 2, i + 1, Strings.GlassBottom2, cancellationToken);
+                for (i = Constants.GlassDeltaY; i < _glassArray.GetUpperBound(1) + 1 + Constants.GlassDeltaY; i++)
+                    await IO.OutAsync(Constants.GlassDeltaX - 2, i, Strings.GlassItem, cancellationToken);
+                await IO.OutAsync(Constants.GlassDeltaX - 2, i, Strings.GlassBottom1, cancellationToken);
+                await IO.OutAsync(Constants.GlassDeltaX - 2, i + 1, Strings.GlassBottom2, cancellationToken);
             }
             else
             {
@@ -108,7 +105,7 @@ namespace Terminal.Tetris.Components
                             line += Strings.EmptyBox;
                         else
                             line += Strings.BlockBox;
-                    await IO.OutAsync(DeltaX, y + DeltaY, line, cancellationToken);
+                    await IO.OutAsync(Constants.GlassDeltaX, y + Constants.GlassDeltaY, line, cancellationToken);
                 }
             }
         }
@@ -176,7 +173,7 @@ namespace Terminal.Tetris.Components
                 _block = block;
 
                 await DrawGlassAsync(false, cancellationToken);
-                await DrawBlockAsync(_block, DeltaX, DeltaY, cancellationToken);
+                await DrawBlockAsync(_block, Constants.GlassDeltaX, Constants.GlassDeltaY, cancellationToken);
             }
             else
             {

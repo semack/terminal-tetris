@@ -9,5 +9,7 @@
         public const int GlassWidth = 10;
         public const int GlassHeight = 20;
         public const int LinesNextLevelSwitch = 50;
+        public const int GlassDeltaX = 27;
+        public const int GlassDeltaY = 1;
     }
 }
