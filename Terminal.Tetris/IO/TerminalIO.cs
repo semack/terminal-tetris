@@ -44,7 +44,6 @@ namespace Terminal.Tetris.IO
 
         public async Task<byte?> GetKeyAsync(CancellationToken cancellationToken = default)
         {
-            System.Terminal.CursorKeyMode = TerminalKeyMode.Application;
             if (!System.Terminal.IsRawMode)
             {
                 System.Terminal.SetRawMode(true, false);
