@@ -27,13 +27,6 @@ namespace Terminal.Tetris.IO
             return Task.FromResult(output);
         }
 
-        public async Task OutAsync(string output, CancellationToken cancellationToken = default)
-        {
-            System.Terminal.Out(output);
-
-            await Task.CompletedTask;
-        }
-
         public async Task OutAsync(int x, int y, string output, CancellationToken cancellationToken = default)
         {
             System.Terminal.MoveCursorTo(x, y);
@@ -44,7 +37,6 @@ namespace Terminal.Tetris.IO
 
         public async Task<byte?> GetKeyAsync(CancellationToken cancellationToken = default)
         {
-            System.Terminal.CursorKeyMode = TerminalKeyMode.Application;
             if (!System.Terminal.IsRawMode)
             {
                 System.Terminal.SetRawMode(true, false);

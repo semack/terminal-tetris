@@ -16,7 +16,7 @@ namespace Terminal.Tetris.Screens
         private readonly Glass _glass;
         private readonly HelpBoard _helpBoard;
         private readonly ScoreBoard _scoreBoard;
-        private bool _initialized;
+        private bool _isInitialized;
         private bool _isGameActive;
         private bool _isTerminated;
         private int _levelSwitch;
@@ -110,7 +110,7 @@ namespace Terminal.Tetris.Screens
             _glass.OnGameFinished += (sender, args) => { _isGameActive = false; };
             _glass.OnNewBlock += (sender, block) => { _scoreBoard.Score += 10; };
 
-            _initialized = true;
+            _isInitialized = true;
 
             await Task.CompletedTask;
         }
@@ -118,7 +118,7 @@ namespace Terminal.Tetris.Screens
         public async Task<LeaderBoardItem> PlayGameAsync(short playerLevel,
             CancellationToken cancellationToken = default)
         {
-            if (!_initialized)
+            if (!_isInitialized)
                 await InitializeAsync(cancellationToken);
 
             _levelSwitch = 0;
