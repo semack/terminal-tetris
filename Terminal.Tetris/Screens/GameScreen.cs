@@ -61,7 +61,7 @@ namespace Terminal.Tetris.Screens
                     if (key == 48) // 0 - show/hide help screen
                         await _helpBoard.SetVisibleAsync(!_helpBoard.Visible, cancellationToken);
                     else if (key == 49) // 1 - show/hide next figure
-                        await _glass.ShowHideNextAsync(cancellationToken);
+                        await _glass.SetNextVisibleAsync(!_glass.NextVisible, cancellationToken);
                     else if (key == 52) // 4 - next level
                         await _scoreBoard.NextLevelAsync(cancellationToken);
                     else if (key == 55 || key == 68) // 7 - left 

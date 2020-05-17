@@ -29,21 +29,23 @@ namespace Terminal.Tetris.Components
 
         private short[,] _glassArray;
         private Block _nextBlock;
-        private bool _showNext;
 
         public Glass(TerminalIO io, Localizer localizer) : base(io, localizer)
         {
+        }
+
+        public bool NextVisible { get; private set; }
+
+        public async Task SetNextVisibleAsync(bool visible, CancellationToken cancellationToken)
+        {
+            NextVisible = visible;
+            await DisplayNextBlockAsync(cancellationToken);
         }
 
         public event EventHandler OnFullLine;
         public event EventHandler OnGameFinished;
         public event EventHandler<Block> OnNewBlock;
 
-        public async Task ShowHideNextAsync(CancellationToken cancellationToken)
-        {
-            _showNext = !_showNext;
-            await DisplayNextBlockAsync(cancellationToken);
-        }
 
         private async Task<Block> GetNextBlockAsync()
         {
@@ -73,7 +75,7 @@ namespace Terminal.Tetris.Components
             var cleanLine = new string(' ', 8);
             for (var i = 0; i <= 3; i++) await IO.OutAsync(x, _nextBlock.Y + i, cleanLine, cancellationToken);
 
-            if (_showNext)
+            if (NextVisible)
                 await DrawBlockAsync(_nextBlock, x, 0, cancellationToken);
         }
 
@@ -82,6 +84,7 @@ namespace Terminal.Tetris.Components
         {
             _glassArray = new short[Constants.GlassWidth, Constants.GlassHeight];
             _block = null;
+            NextVisible = false;
             await Task.CompletedTask;
         }
 
