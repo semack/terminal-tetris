@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.Definitions;
 using Terminal.Tetris.IO;
-using Terminal.Tetris.Resources;
+using Terminal.Tetris.Localization;
 using Terminal.Tetris.Screens;
 
 namespace Terminal.Tetris.Services
@@ -13,15 +13,19 @@ namespace Terminal.Tetris.Services
     public class TetrisService : BaseComponent, IHostedService
     {
         private readonly GameScreen _gameScreen;
+        private readonly InitScreen _initScreen;
         private readonly LeaderBoardScreen _leaderBoardScreen;
         private readonly SplashScreen _splashScreen;
 
         public TetrisService(TerminalIO io,
+            Localizer localizer,
+            InitScreen initScreen,
             SplashScreen splashScreen,
             GameScreen gameScreen,
             LeaderBoardScreen leaderBoardScreen)
-            : base(io)
+            : base(io, localizer)
         {
+            _initScreen = initScreen;
             _splashScreen = splashScreen;
             _gameScreen = gameScreen;
             _leaderBoardScreen = leaderBoardScreen;
@@ -35,8 +39,11 @@ namespace Terminal.Tetris.Services
                 {
                     var (width, height) = await IO.GetWidthHeightAsync(cancellationToken);
                     if (width < Constants.ScreenWidth || height < Constants.ScreenHeight)
-                        throw new ArgumentException(string.Format(Strings.ScreenResolutionError,
+                        throw new ArgumentException(string.Format(Text.ScreenResolutionError,
                             Constants.ScreenWidth, Constants.ScreenHeight));
+
+                    var culture = await _initScreen.SelectCultureAsync(cancellationToken);
+                    await Text.SetCultureAsync(culture, cancellationToken);
 
                     var playAgain = true;
 
@@ -54,14 +61,13 @@ namespace Terminal.Tetris.Services
                     await IO.TerminateAsync(cancellationToken);
                 }
             }, cancellationToken);
-            
+
             await Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             await IO.ClearAsync(cancellationToken);
-            await IO.OutAsync(0, Constants.ScreenHeight, Strings.GameCopyright, cancellationToken);
         }
     }
 }

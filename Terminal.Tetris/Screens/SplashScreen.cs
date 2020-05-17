@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.IO;
-using Terminal.Tetris.Resources;
+using Terminal.Tetris.Localization;
 
 namespace Terminal.Tetris.Screens
 {
     public class SplashScreen : BaseComponent
     {
-        public SplashScreen(TerminalIO io) : base(io)
+        public SplashScreen(TerminalIO io,
+            Localizer localizer) : base(io, localizer)
         {
         }
 
@@ -27,10 +28,10 @@ namespace Terminal.Tetris.Screens
         private async Task DrawAsync(CancellationToken cancellationToken = default)
         {
             await IO.ClearAsync(cancellationToken);
-            await IO.OutAsync(33, 6, Strings.SplashSymbol, cancellationToken);
-            await IO.OutAsync(33, 7, Strings.SplashLogo, cancellationToken);
-            await IO.OutAsync(41, 8, Strings.SplashSymbol, cancellationToken);
-            await IO.OutAsync(19, 20, Strings.YourLevel, cancellationToken);
+            await IO.OutAsync(33, 6, Text.SplashSymbol, cancellationToken);
+            await IO.OutAsync(33, 7, Text.SplashLogo, cancellationToken);
+            await IO.OutAsync(41, 8, Text.SplashSymbol, cancellationToken);
+            await IO.OutAsync(19, 20, Text.YourLevel, cancellationToken);
         }
 
         private async Task<short?> InputLevelAsync(CancellationToken cancellationToken = default)

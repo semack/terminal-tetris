@@ -2,8 +2,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.IO;
+using Terminal.Tetris.Localization;
 using Terminal.Tetris.Models;
-using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Components
 {
@@ -12,7 +12,7 @@ namespace Terminal.Tetris.Components
         private int _lines;
         private int _score;
 
-        public ScoreBoard(TerminalIO io) : base(io)
+        public ScoreBoard(TerminalIO io, Localizer localizer) : base(io, localizer)
         {
         }
 
@@ -40,11 +40,11 @@ namespace Terminal.Tetris.Components
 
         private async Task InvalidateAsync(CancellationToken cancellationToken = default)
         {
-            await IO.OutAsync(0, 1, $"{Strings.LinesCount}:", cancellationToken);
+            await IO.OutAsync(0, 1, $"{Text.LinesCount}:", cancellationToken);
             await IO.OutAsync(13, 1, 3, _lines.ToString(), cancellationToken);
-            await IO.OutAsync(0, 2, $"{Strings.Level}:", cancellationToken);
+            await IO.OutAsync(0, 2, $"{Text.Level}:", cancellationToken);
             await IO.OutAsync(13, 2, 3, Level.ToString(), cancellationToken);
-            await IO.OutAsync(2, 3, $"{Strings.Score}:", cancellationToken);
+            await IO.OutAsync(2, 3, $"{Text.Score}:", cancellationToken);
             await IO.OutAsync(8, 3, 5, _score.ToString(), cancellationToken);
         }
 

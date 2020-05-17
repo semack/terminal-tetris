@@ -2,13 +2,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.IO;
-using Terminal.Tetris.Resources;
+using Terminal.Tetris.Localization;
 
 namespace Terminal.Tetris.Components
 {
     public class HelpBoard : BaseComponent
     {
-        public HelpBoard(TerminalIO io) : base(io)
+        public HelpBoard(TerminalIO io, Localizer localizer) : base(io, localizer)
         {
         }
 
@@ -19,14 +19,14 @@ namespace Terminal.Tetris.Components
             Visible = visible;
             if (Visible)
             {
-                await IO.OutAsync(52, 2, Strings.MoveLeft, cancellationToken);
-                await IO.OutAsync(64, 2, Strings.MoveRight, cancellationToken);
-                await IO.OutAsync(57, 3, Strings.Rotate, cancellationToken);
-                await IO.OutAsync(52, 4, Strings.NextLevel, cancellationToken);
-                await IO.OutAsync(64, 4, Strings.SoftDrop, cancellationToken);
-                await IO.OutAsync(52, 5, Strings.ShowNext, cancellationToken);
-                await IO.OutAsync(52, 6, Strings.ClearHelp, cancellationToken);
-                await IO.OutAsync(54, 7, Strings.Drop, cancellationToken);
+                await IO.OutAsync(52, 2, Text.MoveLeft, cancellationToken);
+                await IO.OutAsync(64, 2, Text.MoveRight, cancellationToken);
+                await IO.OutAsync(57, 3, Text.Rotate, cancellationToken);
+                await IO.OutAsync(52, 4, Text.NextLevel, cancellationToken);
+                await IO.OutAsync(64, 4, Text.SoftDrop, cancellationToken);
+                await IO.OutAsync(52, 5, Text.ShowNext, cancellationToken);
+                await IO.OutAsync(52, 6, Text.ClearHelp, cancellationToken);
+                await IO.OutAsync(54, 7, Text.Drop, cancellationToken);
             }
             else
             {

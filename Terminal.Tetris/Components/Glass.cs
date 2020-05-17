@@ -6,7 +6,7 @@ using Terminal.Tetris.Common;
 using Terminal.Tetris.Definitions;
 using Terminal.Tetris.Enums;
 using Terminal.Tetris.IO;
-using Terminal.Tetris.Resources;
+using Terminal.Tetris.Localization;
 
 namespace Terminal.Tetris.Components
 {
@@ -31,7 +31,7 @@ namespace Terminal.Tetris.Components
         private Block _nextBlock;
         private bool _showNext;
 
-        public Glass(TerminalIO io) : base(io)
+        public Glass(TerminalIO io, Localizer localizer) : base(io, localizer)
         {
         }
 
@@ -91,9 +91,9 @@ namespace Terminal.Tetris.Components
             {
                 int i;
                 for (i = Constants.GlassDeltaY; i < _glassArray.GetUpperBound(1) + 1 + Constants.GlassDeltaY; i++)
-                    await IO.OutAsync(Constants.GlassDeltaX - 2, i, Strings.GlassItem, cancellationToken);
-                await IO.OutAsync(Constants.GlassDeltaX - 2, i, Strings.GlassBottom1, cancellationToken);
-                await IO.OutAsync(Constants.GlassDeltaX - 2, i + 1, Strings.GlassBottom2, cancellationToken);
+                    await IO.OutAsync(Constants.GlassDeltaX - 2, i, Constants.GlassItem, cancellationToken);
+                await IO.OutAsync(Constants.GlassDeltaX - 2, i, Constants.GlassBottom1, cancellationToken);
+                await IO.OutAsync(Constants.GlassDeltaX - 2, i + 1, Constants.GlassBottom2, cancellationToken);
             }
             else
             {
@@ -102,9 +102,9 @@ namespace Terminal.Tetris.Components
                     string line = null;
                     for (var x = 0; x <= _glassArray.GetUpperBound(0); x++)
                         if (_glassArray[x, y] == 0)
-                            line += Strings.EmptyBox;
+                            line += Constants.EmptyBox;
                         else
-                            line += Strings.BlockBox;
+                            line += Constants.BlockBox;
                     await IO.OutAsync(Constants.GlassDeltaX, y + Constants.GlassDeltaY, line, cancellationToken);
                 }
             }
@@ -256,7 +256,7 @@ namespace Terminal.Tetris.Components
                 if (block[x, y] != 0)
                     await IO.OutAsync(deltaX + (block.X + x) * 2,
                         deltaY + block.Y + y,
-                        Strings.BlockBox,
+                        Constants.BlockBox,
                         cancellationToken);
         }
     }

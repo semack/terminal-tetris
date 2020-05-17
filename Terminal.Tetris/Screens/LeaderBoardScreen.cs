@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Terminal.Tetris.Common;
 using Terminal.Tetris.Definitions;
 using Terminal.Tetris.IO;
+using Terminal.Tetris.Localization;
 using Terminal.Tetris.Models;
-using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
@@ -17,7 +17,8 @@ namespace Terminal.Tetris.Screens
     {
         private IList<LeaderBoardItem> _leaderBoard;
 
-        public LeaderBoardScreen(TerminalIO io) : base(io)
+        public LeaderBoardScreen(TerminalIO io,
+            Localizer localizer) : base(io, localizer)
         {
             _leaderBoard = new List<LeaderBoardItem>();
         }
@@ -82,9 +83,9 @@ namespace Terminal.Tetris.Screens
         private async Task DrawAsync(CancellationToken cancellationToken = default)
         {
             await IO.ClearAsync(cancellationToken);
-            await IO.OutAsync(16, 1, Strings.Name, cancellationToken);
-            await IO.OutAsync(27, 1, Strings.Level, cancellationToken);
-            await IO.OutAsync(36, 1, Strings.Score, cancellationToken);
+            await IO.OutAsync(16, 1, Text.Name, cancellationToken);
+            await IO.OutAsync(27, 1, Text.Level, cancellationToken);
+            await IO.OutAsync(36, 1, Text.Score, cancellationToken);
             var i = 1;
             foreach (var item in _leaderBoard)
             {
@@ -92,20 +93,20 @@ namespace Terminal.Tetris.Screens
                 await IO.OutAsync(27, 1 + i, 7, item.Level.ToString(), cancellationToken);
                 await IO.OutAsync(36, 1 + i, 4, item.Score.ToString(), cancellationToken);
                 if (item.IsCurrentPlayer)
-                    await IO.OutAsync(40, 1 + i, 3, Strings.CurrentPlayer, cancellationToken);
+                    await IO.OutAsync(40, 1 + i, 3, Constants.CurrentPlayer, cancellationToken);
                 i++;
             }
         }
 
         private async Task<bool?> PlayerInputAsync(CancellationToken cancellationToken = default)
         {
-            await IO.OutAsync(13, 23, Strings.PlayAgain, cancellationToken);
+            await IO.OutAsync(13, 23, Text.PlayAgain, cancellationToken);
             var input = await IO.ReadLineAsync(cancellationToken);
             if (!string.IsNullOrEmpty(input))
             {
-                if (input.Equals(Strings.Yes, StringComparison.OrdinalIgnoreCase))
+                if (input.Equals(Text.Yes, StringComparison.OrdinalIgnoreCase))
                     return await Task.FromResult(true);
-                if (input.Equals(Strings.No, StringComparison.OrdinalIgnoreCase))
+                if (input.Equals(Text.No, StringComparison.OrdinalIgnoreCase))
                     return await Task.FromResult(false);
             }
 

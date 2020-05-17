@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Terminal.Tetris.Components;
 using Terminal.Tetris.IO;
+using Terminal.Tetris.Localization;
 using Terminal.Tetris.Screens;
 using Terminal.Tetris.Services;
 
@@ -16,8 +17,10 @@ namespace Terminal.Tetris
                 .CreateDefaultBuilder()
                 .ConfigureServices(services =>
                     {
+                        services.AddScoped<Localizer>();
                         services.AddSingleton<IHostedService, TetrisService>();
                         services.AddSingleton<TerminalIO>();
+                        services.AddTransient<InitScreen>();
                         services.AddTransient<SplashScreen>();
                         services.AddTransient<LeaderBoardScreen>();
                         services.AddTransient<GameScreen>();

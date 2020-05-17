@@ -6,8 +6,8 @@ using Terminal.Tetris.Components;
 using Terminal.Tetris.Definitions;
 using Terminal.Tetris.Enums;
 using Terminal.Tetris.IO;
+using Terminal.Tetris.Localization;
 using Terminal.Tetris.Models;
-using Terminal.Tetris.Resources;
 
 namespace Terminal.Tetris.Screens
 {
@@ -16,15 +16,16 @@ namespace Terminal.Tetris.Screens
         private readonly Glass _glass;
         private readonly HelpBoard _helpBoard;
         private readonly ScoreBoard _scoreBoard;
-        private bool _isInitialized;
         private bool _isGameActive;
+        private bool _isInitialized;
         private bool _isTerminated;
         private int _levelSwitch;
 
         public GameScreen(TerminalIO io,
+            Localizer localizer,
             HelpBoard helpBoard,
             ScoreBoard scoreBoard,
-            Glass glass) : base(io)
+            Glass glass) : base(io, localizer)
         {
             _scoreBoard = scoreBoard;
             _helpBoard = helpBoard;
@@ -35,7 +36,7 @@ namespace Terminal.Tetris.Screens
 
         private async Task<string> ReadPlayerNameAsync(CancellationToken cancellationToken = default)
         {
-            await IO.OutAsync(0, 15, Strings.ReadPlayerName, cancellationToken);
+            await IO.OutAsync(0, 15, Text.ReadPlayerName, cancellationToken);
             var result = await IO.ReadLineAsync(cancellationToken);
             return await Task.FromResult(result);
         }
@@ -58,37 +59,21 @@ namespace Terminal.Tetris.Screens
                     }
 
                     if (key == 48) // 0 - show/hide help screen
-                    {
                         await _helpBoard.SetVisibleAsync(!_helpBoard.Visible, cancellationToken);
-                    }
                     else if (key == 49) // 1 - show/hide next figure
-                    {
                         await _glass.ShowHideNextAsync(cancellationToken);
-                    }
                     else if (key == 52) // 4 - next level
-                    {
                         await _scoreBoard.NextLevelAsync(cancellationToken);
-                    }
                     else if (key == 55 || key == 68) // 7 - left 
-                    {
                         playerAction = PlayerActionEnum.Left;
-                    }
                     else if (key == 57 || key == 67) // 9 - right 
-                    {
                         playerAction = PlayerActionEnum.Right;
-                    }
                     else if (key == 56 || key == 65) // 8 - rotate 
-                    {
                         playerAction = PlayerActionEnum.Rotate;
-                    }
                     else if (key == 53 || key == 66) // 5 - soft drop 
-                    {
                         playerAction = PlayerActionEnum.SoftDrop;
-                    }
                     else if (key == 32) // SPACE - drop
-                    {
                         playerAction = PlayerActionEnum.Drop;
-                    }
 
                     if (playerAction != PlayerActionEnum.None)
                         await _glass.TickAsync(playerAction, cancellationToken);
