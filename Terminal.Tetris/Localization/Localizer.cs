@@ -119,9 +119,13 @@ namespace Terminal.Tetris.Localization
             get
             {
                 var val = string.Empty;
-                if (!_resources.ContainsKey(_culture.Name)) return val;
-                if (_resources[_culture.Name].ContainsKey(name))
-                    val = _resources[_culture.Name][name];
+                if (!_resources.ContainsKey(_culture.Name)) 
+                    val = _resources[DefaultCultureName][name];
+                else
+                {
+                    if (_resources[_culture.Name].ContainsKey(name))
+                        val = _resources[_culture.Name][name];
+                }
                 return val;
             }
         }
