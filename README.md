@@ -26,5 +26,5 @@ Contributions are welcome. Just open an Issue or submit a PR.
 You can reach me via my [email](mailto://semack@gmail.com).
 
 ## Thanks
-Many thanks especially to [Alex Rønne Petersen](https://github.com/alexrp) for his great terminal [library](https://github.com/alexrp/system-terminal).
+Many thanks especially to [Igor Maznitsa](https://github.com/raydac) for his [library](https://github.com/raydac/zxtap-to-wav).
 
